@@ -5,10 +5,16 @@
 
 set -e
 
-AUDIO_FILE="$1"
+# Trim trailing newlines or spaces from input argument
+AUDIO_FILE=$(echo "$1" | tr -d '\r\n')
 
-if [[ -z "$AUDIO_FILE" || ! -f "$AUDIO_FILE" ]]; then
+if [[ -z "$AUDIO_FILE" ]]; then
     exit 0
+fi
+
+if [[ ! -f "$AUDIO_FILE" ]]; then
+    echo "Error: Audio file does not exist at path: '$AUDIO_FILE'" >&2
+    exit 1
 fi
 
 PROVIDER="${TRANSCRIPTION_PROVIDER:-mistral}"
@@ -22,13 +28,31 @@ case "$PROVIDER" in
         
         RESPONSE=$(curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
           --header "Authorization: Bearer $MISTRAL_API_KEY" \
-          --form "file=@\"$AUDIO_FILE\"" \
+          --form "file=@$AUDIO_FILE" \
           --form 'model="voxtral-mini-latest"')
           
-        osascript -l JavaScript -e "
-            var resp = $RESPONSE;
-            if (resp.text) { resp.text.trim(); } else { ''; }
-        "
+        RESULT=$(osascript -l JavaScript -e "
+            try {
+                var resp = $RESPONSE;
+                if (resp.error) {
+                    console.log('API Error: ' + JSON.stringify(resp.error));
+                    '';
+                } else if (resp.text) {
+                    resp.text.trim();
+                } else {
+                    '';
+                }
+            } catch (e) {
+                '';
+            }
+        " 2>&1)
+
+        if [[ "$RESULT" == API\ Error:* ]]; then
+            echo "$RESULT" >&2
+            exit 1
+        fi
+
+        printf "%s" "$RESULT"
         ;;
 
     groq)
@@ -43,10 +67,28 @@ case "$PROVIDER" in
           -F "model=whisper-large-v3-turbo" \
           -F "response_format=json")
 
-        osascript -l JavaScript -e "
-            var resp = $RESPONSE;
-            if (resp.text) { resp.text.trim(); } else { ''; }
-        "
+        RESULT=$(osascript -l JavaScript -e "
+            try {
+                var resp = $RESPONSE;
+                if (resp.error) {
+                    console.log('API Error: ' + JSON.stringify(resp.error));
+                    '';
+                } else if (resp.text) {
+                    resp.text.trim();
+                } else {
+                    '';
+                }
+            } catch (e) {
+                '';
+            }
+        " 2>&1)
+
+        if [[ "$RESULT" == API\ Error:* ]]; then
+            echo "$RESULT" >&2
+            exit 1
+        fi
+
+        printf "%s" "$RESULT"
         ;;
 
     parakeet)
@@ -56,10 +98,14 @@ case "$PROVIDER" in
           -F "file=@$AUDIO_FILE" \
           -F "model=parakeet")
 
-        osascript -l JavaScript -e "
-            var resp = $RESPONSE;
-            if (resp.text) { resp.text.trim(); } else { ''; }
-        "
+        RESULT=$(osascript -l JavaScript -e "
+            try {
+                var resp = $RESPONSE;
+                if (resp.text) { resp.text.trim(); } else { ''; }
+            } catch(e) { ''; }
+        ")
+
+        printf "%s" "$RESULT"
         ;;
 
     *)

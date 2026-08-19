@@ -29,9 +29,9 @@ if [[ -f "$PID_FILE" ]]; then
         rm -f "$PID_FILE"
         
         if [[ -f "$CURRENT_FILE" ]]; then
-            AUDIO_PATH=$(cat "$CURRENT_FILE")
+            AUDIO_PATH=$(cat "$CURRENT_FILE" | tr -d '\r\n')
             rm -f "$CURRENT_FILE"
-            echo "$AUDIO_PATH"
+            printf "%s" "$AUDIO_PATH"
         fi
         exit 0
     else
@@ -44,7 +44,7 @@ fi
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 AUDIO_PATH="$DATA_DIR/recordings/${TIMESTAMP}.wav"
 
-echo "$AUDIO_PATH" > "$CURRENT_FILE"
+printf "%s" "$AUDIO_PATH" > "$CURRENT_FILE"
 
 nohup rec -r 16000 -c 1 -b 16 "$AUDIO_PATH" >/dev/null 2>&1 &
 echo $! > "$PID_FILE"
