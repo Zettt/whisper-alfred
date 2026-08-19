@@ -3,6 +3,8 @@
 # Audio Retention Pruner for Alfred Workflow
 # Purges recorded WAV files older than RETENTION_DAYS
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 DATA_DIR="${alfred_workflow_data:-$HOME/Library/Application Support/Alfred/Workflow Data/transcribe}"
 RETENTION_DAYS="${RETENTION_DAYS:-7}"
 

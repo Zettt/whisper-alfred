@@ -5,7 +5,8 @@
 
 set -e
 
-# Trim trailing newlines or spaces from input argument
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 AUDIO_FILE=$(echo "$1" | tr -d '\r\n')
 
 if [[ -z "$AUDIO_FILE" ]]; then
@@ -14,6 +15,13 @@ fi
 
 if [[ ! -f "$AUDIO_FILE" ]]; then
     echo "Error: Audio file does not exist at path: '$AUDIO_FILE'" >&2
+    exit 1
+fi
+
+# Check file size (WAV files under 4000 bytes contain negligible audio data)
+FILE_SIZE=$(wc -c < "$AUDIO_FILE" | tr -d ' ')
+if [[ "$FILE_SIZE" -lt 4000 ]]; then
+    echo "Error: Audio recording is empty or too short ($FILE_SIZE bytes)." >&2
     exit 1
 fi
 

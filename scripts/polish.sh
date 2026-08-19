@@ -5,6 +5,8 @@
 
 set -e
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 TEXT_INPUT="$1"
 
 if [[ -z "$TEXT_INPUT" ]]; then
@@ -19,12 +21,12 @@ fi
 ENABLE="${ENABLE_CLEANUP:-false}"
 
 if [[ "$ENABLE" != "true" ]]; then
-    echo "$TEXT_INPUT"
+    printf "%s" "$TEXT_INPUT"
     exit 0
 fi
 
 if [[ -z "$MISTRAL_API_KEY" ]]; then
-    echo "$TEXT_INPUT"
+    printf "%s" "$TEXT_INPUT"
     exit 0
 fi
 
@@ -61,7 +63,7 @@ POLISHED=$(osascript -l JavaScript -e "
 ")
 
 if [[ -n "$POLISHED" ]]; then
-    echo "$POLISHED"
+    printf "%s" "$POLISHED"
 else
-    echo "$TEXT_INPUT"
+    printf "%s" "$TEXT_INPUT"
 fi

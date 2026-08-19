@@ -5,12 +5,15 @@
 
 set -e
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # Default directory fallbacks if run outside Alfred
 CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/transcribe}"
 DATA_DIR="${alfred_workflow_data:-$HOME/Library/Application Support/Alfred/Workflow Data/transcribe}"
 
 PID_FILE="$CACHE_DIR/record.pid"
 CURRENT_FILE="$CACHE_DIR/current_recording.txt"
+LOG_FILE="$CACHE_DIR/rec.log"
 
 mkdir -p "$CACHE_DIR"
 mkdir -p "$DATA_DIR/recordings"
@@ -46,7 +49,7 @@ AUDIO_PATH="$DATA_DIR/recordings/${TIMESTAMP}.wav"
 
 printf "%s" "$AUDIO_PATH" > "$CURRENT_FILE"
 
-nohup rec -r 16000 -c 1 -b 16 "$AUDIO_PATH" >/dev/null 2>&1 &
+nohup rec -r 16000 -c 1 -b 16 "$AUDIO_PATH" >"$LOG_FILE" 2>&1 &
 echo $! > "$PID_FILE"
 
 # Output empty string when starting recording
