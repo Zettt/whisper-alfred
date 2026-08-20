@@ -2,7 +2,7 @@
 
 Created by **Zettt** ([zettt.com](https://zettt.com))
 
-Whisper into any text field on your Mac using **Mistral AI**, **Groq Cloud**, or **Zero-Cloud Local AI** (`whisper.cpp` / `faster-whisper` / `sherpa-onnx`).
+Whisper into any text field on your Mac using **Mistral AI**, **Groq Cloud**, or **Zero-Cloud Local AI** (`whisper.cpp / faster-whisper / sherpa-onnx`).
 
 ---
 
@@ -22,11 +22,44 @@ brew install sox
 
 `sox` is responsible for recording the audio. When you run the workflow for the first time via hotkey, you should see a permission box pop up asking to give microphone access to Alfred. During creation and testing, I didn't have see the dialog right away but after I went to sleep, and opened my MacBook's lid the next day, I was able to approve it.
 
+> NOTE: To make the workflow support a "toggle", and because it has to hand the recording off its operation to a background CLI tool, `sox` is being invoked, and **kept running** in the background. After each recording is done, the process will be gone too. If you experience any issus during setup, you might want to open Activity Monitor and check for any stray `sox` processes, and quit them. Shouldn't happen but if it does you know where to look.
+
+This is the exact line that invokes `sox`:
+
+```bash
+# Detach stdin/stdout/stderr completely so Alfred subshell pipe closes instantly
+nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
+```
+
 ---
 
-## Local Transcription Setup Guide: Whisper vs. Parakeet
+## Cloud Transcription & LLM Cleanup Setup
 
-This guide walks through setting up local, zero-cloud audio transcription for `alfred-transcribe`.
+Cloud-based API inference is supported out of the box using **Mistral AI** or **Groq Cloud**.
+
+### 1. Obtain API Keys
+
+Create an account and generate an API key from the provider's dashboard:
+
+- **Mistral AI:** [Mistral Console API Keys](https://console.mistral.ai/api-keys/)
+- **Groq Cloud:** [Groq Console API Keys](https://console.groq.com/keys)
+
+### 2. Model Identifier Strings
+
+You must supply the exact model identifier string expected by each provider. You can find up-to-date model lists on each provider's website:
+
+| Provider | Default Transcription Model | Default LLM Cleanup Model | Available Models & Documentation |
+| --- | --- | --- | --- |
+| **Mistral AI** | `voxtral-mini-latest` | `mistral-small-latest` | [Mistral Models Documentation](https://docs.mistral.ai/getting-started/models/) |
+| **Groq Cloud** | `whisper-large-v3-turbo` | `llama-3.1-8b-instant` | [Groq Supported Models List](https://console.groq.com/docs/models) |
+
+> 💡 **Custom Models:** Set `TRANSCRIPTION_MODEL` and `CLEANUP_MODEL` in your Alfred Workflow configuration to use any supported model string from the provider's documentation.
+
+---
+
+## Local Transcription Setup Guide: Whisper vs. Parakeet (Optional Offline Mode)
+
+If you prefer zero-cloud, 100% offline local transcription on your Apple Silicon Metal GPU, follow this guide.
 
 You can choose between **Path A (Whisper.cpp)** or **Path B (Python Local Servers: Parakeet & Faster-Whisper)** depending on your engine preference.
 
@@ -117,11 +150,12 @@ sherpa-onnx-offline-http-server --port=8080 --model=~/.local-transcribe-server/m
 
 ## Alfred Workflow Configuration
 
-Regardless of whether you choose **Path A**, **Path B1**, or **Path B2**:
+Regardless of whether you choose **Cloud (Mistral/Groq)** or **Local (Path A/B)**:
 
-1. Open **Alfred Preferences** -> **Workflows** -> **Whisper Alfred**.
-2. Set **`TRANSCRIPTION_PROVIDER`** = `local`.
-3. Set **`PARAKEET_ENDPOINT`** (or `LOCAL_ENDPOINT`) = `http://127.0.0.1:8080/v1/audio/transcriptions`.
+1. Open **Alfred Preferences** -> **Workflows** -> **Whisper Alfred** -> **Configure Workflow**.
+2. Set **`TRANSCRIPTION_PROVIDER`** = `mistral`, `groq`, or `local`.
+3. Set your API Key (**`MISTRAL_API_KEY`** / **`GROQ_API_KEY`**) or Local Endpoint (**`PARAKEET_ENDPOINT`** = `http://127.0.0.1:8080/v1/audio/transcriptions`).
+4. (Optional) Set **`TRANSCRIPTION_MODEL`** and **`CLEANUP_MODEL`** to override defaults with custom model strings.
 
 ---
 
