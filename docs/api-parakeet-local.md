@@ -89,7 +89,7 @@ sherpa-onnx-offline-http-server --port=8080 --model=~/.local-transcribe-server/m
 
 Regardless of whether you choose **Path A**, **Path B1**, or **Path B2**:
 
-1. Open **Alfred Preferences** -> **Workflows** -> **Alfred Transcribe**.
+1. Open **Alfred Preferences** -> **Workflows** -> **Whisper Alfred**.
 2. Set **`TRANSCRIPTION_PROVIDER`** = `local`.
 3. Set **`PARAKEET_ENDPOINT`** (or `LOCAL_ENDPOINT`) = `http://127.0.0.1:8080/v1/audio/transcriptions`.
 
@@ -100,5 +100,5 @@ Regardless of whether you choose **Path A**, **Path B1**, or **Path B2**:
 If your local server is offline or stopped when triggering the Hotkey, `alfred-transcribe` will paste a friendly notification message into your frontmost application:
 
 ```text
-[Alfred Transcribe Error: Could not connect to local server on http://127.0.0.1:8080/v1/audio/transcriptions. Please verify your local server is running.]
+[Whisper Alfred Error: Could not connect to local server on http://127.0.0.1:8080/v1/audio/transcriptions. Please verify your local server is running.]
 ```

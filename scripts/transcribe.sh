@@ -40,7 +40,7 @@ mistral)
                 try {
                     var resp = JSON.parse(argv[0]);
                     if (resp.error) {
-                        return "[Alfred Transcribe Error: Mistral API error]";
+                        return "[Whisper Alfred Error: Mistral API error]";
                     }
                     if (resp.text) {
                         return resp.text.trim();
@@ -72,7 +72,7 @@ groq)
                 try {
                     var resp = JSON.parse(argv[0]);
                     if (resp.error) {
-                        return "[Alfred Transcribe Error: Groq API error]";
+                        return "[Whisper Alfred Error: Groq API error]";
                     }
                     if (resp.text) {
                         return resp.text.trim();
@@ -100,9 +100,9 @@ local | parakeet)
                     var resp = JSON.parse(argv[0]);
                     if (resp.error) {
                         if (resp.error === "LOCAL_SERVER_OFFLINE") {
-                            return "[Alfred Transcribe Error: Could not connect to local server on " + argv[1] + ". Please verify your local server is running.]";
+                            return "[Whisper Alfred Error: Could not connect to local server on " + argv[1] + ". Please verify your local server is running.]";
                         }
-                        return "[Alfred Transcribe Error: Local server error]";
+                        return "[Whisper Alfred Error: Local server error]";
                     }
                     if (resp.text) {
                         return resp.text.trim();

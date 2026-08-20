@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Test suite for Alfred Transcribe workflow scripts
+# Test suite for Whisper Alfred workflow scripts
 
 set -e
 
