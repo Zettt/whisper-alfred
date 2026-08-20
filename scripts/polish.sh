@@ -20,47 +20,47 @@ fi
 
 ENABLE="${ENABLE_CLEANUP:-false}"
 
-if [[ "$ENABLE" != "true" ]]; then
-    printf "%s" "$TEXT_INPUT"
-    exit 0
-fi
-
-if [[ -z "$MISTRAL_API_KEY" ]]; then
+if [[ "$ENABLE" != "true" || -z "$MISTRAL_API_KEY" ]]; then
     printf "%s" "$TEXT_INPUT"
     exit 0
 fi
 
 MODEL="${POLISH_MODEL:-mistral-small-latest}"
 
-# Escape JSON string safely via osascript JSON stringify
-JSON_INPUT=$(osascript -l JavaScript -e "JSON.stringify('$TEXT_INPUT')")
-
 PROMPT="You are a text cleanup assistant. Fix grammar, remove filler words (such as um, uh, like), eliminate speech repetitions, and fix punctuation. Return ONLY the polished text with no introduction, explanation, or markdown wrappers."
 
-PAYLOAD=$(osascript -l JavaScript -e "
-    JSON.stringify({
-        model: '$MODEL',
-        messages: [
-            { role: 'system', content: '$PROMPT' },
-            { role: 'user', content: $JSON_INPUT }
-        ],
-        temperature: 0.2
-    });
-")
+# Safely construct JSON payload using osascript argument passing
+PAYLOAD=$(osascript -l JavaScript -e '
+    function run(argv) {
+        return JSON.stringify({
+            model: argv[0],
+            messages: [
+                { role: "system", content: argv[1] },
+                { role: "user", content: argv[2] }
+            ],
+            temperature: 0.2
+        });
+    }
+' "$MODEL" "$PROMPT" "$TEXT_INPUT")
 
 RESPONSE=$(curl -s https://api.mistral.ai/v1/chat/completions \
   -H "Authorization: Bearer $MISTRAL_API_KEY" \
   -H "Content-Type: application/json" \
   -d "$PAYLOAD")
 
-POLISHED=$(osascript -l JavaScript -e "
-    var resp = $RESPONSE;
-    if (resp && resp.choices && resp.choices[0] && resp.choices[0].message) {
-        resp.choices[0].message.content.trim();
-    } else {
-        '';
+POLISHED=$(osascript -l JavaScript -e '
+    function run(argv) {
+        try {
+            var resp = JSON.parse(argv[0]);
+            if (resp && resp.choices && resp.choices[0] && resp.choices[0].message) {
+                return resp.choices[0].message.content.trim();
+            }
+            return "";
+        } catch(e) {
+            return "";
+        }
     }
-")
+' "$RESPONSE")
 
 if [[ -n "$POLISHED" ]]; then
     printf "%s" "$POLISHED"
