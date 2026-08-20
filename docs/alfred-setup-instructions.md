@@ -18,6 +18,7 @@ Click the **Configure Workflow** button (top right of workflow window) and add:
 - `GROQ_API_KEY`: *(Optional - Your Groq API key)*
 - `PARAKEET_ENDPOINT`: `http://127.0.0.1:8080/v1/audio/transcriptions`
 - `ENABLE_CLEANUP`: `false` (Set to `true` for LLM grammar polish)
+- `CLEANUP_SYSTEM_PROMPT`: *(Optional - Custom system prompt override for LLM polish)*
 - `RETENTION_DAYS`: `7`
 
 ## 3. Add Workflow Nodes

@@ -20,12 +20,15 @@ Whisper into any text field on your Mac using **Mistral AI**, **Groq Cloud**, or
 ## Quick Start
 
 ### 1. Prerequisites
+
 Install `sox` (required for audio capture):
+
 ```bash
 brew install sox
 ```
 
 ### 2. Workflow Installation
+
 1. Download and open `Alfred Transcribe.alfredworkflow`.
 2. Assign your preferred **Hotkey Trigger** (e.g. `Cmd + Shift + =`).
 
@@ -36,8 +39,9 @@ brew install sox
 Configure these in **Alfred Preferences** -> **Workflows** -> **Alfred Transcribe** -> **Configure Workflow**:
 
 ### 🗣️ Transcription Settings
+
 | Control / Variable | Description | Allowed Values | Default |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `TRANSCRIPTION_PROVIDER` | Active speech recognition engine | `mistral`, `groq`, `local` | `mistral` |
 | `TRANSCRIPTION_MODEL` | Transcription model identifier | Model identifier string | `voxtral-mini-latest` (Mistral)<br>`whisper-large-v3-turbo` (Groq)<br>`local` (Local) |
 | `MISTRAL_API_KEY` | Mistral AI API Key | Bearer Token | - |
@@ -45,14 +49,16 @@ Configure these in **Alfred Preferences** -> **Workflows** -> **Alfred Transcrib
 | `LOCAL_TRANSCRIPTION_ENDPOINT` | Local server HTTP endpoint | URL string | `http://127.0.0.1:8080/v1/audio/transcriptions` |
 
 ### ✨ LLM Text Cleanup Settings
+
 | Control / Variable | Description | Allowed Values | Default |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `ENABLE_CLEANUP` | Enable/disable LLM text polish | `1` / `true`, `0` / `false` | `0` (`false`) |
 | `CLEANUP_PROVIDER` | LLM provider for cleanup | `mistral`, `groq`, `local` | `mistral` |
 | `CLEANUP_MODEL` | Cleanup model identifier | Model identifier string | `mistral-small-latest` (Mistral)<br>`llama-3.1-8b-instant` (Groq)<br>`llama3.2` (Local Ollama) |
 | `LOCAL_CLEANUP_ENDPOINT` | Local Ollama / LocalAI endpoint | URL string | `http://127.0.0.1:11434/v1/chat/completions` |
 
 ### 🧹 Maintenance Settings
+
 | Control / Variable | Description | Default |
 |---|---|---|
 | `RETENTION_DAYS` | Days to keep `.wav` recordings & `.json` sidecars before auto-deletion | `7` |
