@@ -22,10 +22,12 @@ mistral)
 		exit 1
 	fi
 
+	MODEL="${TRANSCRIPTION_MODEL:-voxtral-mini-latest}"
+
 	RESPONSE=$(curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
 		--header "Authorization: Bearer $MISTRAL_API_KEY" \
 		--form "file=@$AUDIO_FILE" \
-		--form 'model="voxtral-mini-latest"')
+		--form "model=\"$MODEL\"")
 
 	TEXT=$(osascript -l JavaScript -e '
             function run(argv) {
@@ -53,10 +55,12 @@ groq)
 		exit 1
 	fi
 
+	MODEL="${TRANSCRIPTION_MODEL:-whisper-large-v3-turbo}"
+
 	RESPONSE=$(curl -s https://api.groq.com/openai/v1/audio/transcriptions \
 		-H "Authorization: Bearer $GROQ_API_KEY" \
 		-F "file=@$AUDIO_FILE" \
-		-F "model=whisper-large-v3-turbo" \
+		-F "model=$MODEL" \
 		-F "response_format=json")
 
 	TEXT=$(osascript -l JavaScript -e '
@@ -81,11 +85,12 @@ groq)
 
 local | parakeet)
 	ENDPOINT="${LOCAL_TRANSCRIPTION_ENDPOINT:-${LOCAL_ENDPOINT:-${PARAKEET_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}}}"
+	MODEL="${TRANSCRIPTION_MODEL:-local}"
 
 	# Connect with 2-second timeout to handle unstarted local server gracefully
 	RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \
 		-F "file=@$AUDIO_FILE" \
-		-F "model=local" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
+		-F "model=$MODEL" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
 
 	TEXT=$(osascript -l JavaScript -e '
             function run(argv) {
