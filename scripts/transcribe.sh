@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Audio Transcription Dispatcher for Alfred Workflow
-# Supports Mistral AI (voxtral), Groq (whisper), and local Parakeet/Whisper.cpp HTTP server endpoints
+# Supports Mistral AI (voxtral), Groq (whisper), and Local Server endpoints (Whisper.cpp / Faster-Whisper / Parakeet)
 
 set -e
 
@@ -79,13 +79,13 @@ groq)
 	printf "%s" "$TEXT"
 	;;
 
-parakeet | local)
-	ENDPOINT="${PARAKEET_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}"
+local | parakeet)
+	ENDPOINT="${PARAKEET_ENDPOINT:-${LOCAL_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}}"
 
 	# Connect with 2-second timeout to handle unstarted local server gracefully
 	RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \
 		-F "file=@$AUDIO_FILE" \
-		-F "model=parakeet" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
+		-F "model=local" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
 
 	TEXT=$(osascript -l JavaScript -e '
             function run(argv) {
