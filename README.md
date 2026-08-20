@@ -2,147 +2,136 @@
 
 Created by **Zettt** ([zettt.com](https://zettt.com))
 
-Whisper into any text field on your Mac using **Mistral AI**, **Groq Cloud**, or **Zero-Cloud Local AI** (`whisper.cpp / faster-whisper / sherpa-onnx`).
+Dictate into any text field on macOS using **Mistral AI**, **Groq Cloud**, or offline **Local AI** (`whisper.cpp`, `faster-whisper`, `sherpa-onnx`).
 
 ---
 
 ## Features
 
-- ⚡ **One-Hotkey Toggle:** Press hotkey once to start dictation, press again to transcribe and auto-paste into your active app.
-- 🌐 **Multi-Provider Support:** Switch between **Mistral AI** (`voxtral-mini`), **Groq Cloud** (`whisper-large-v3-turbo`), and **Local AI Servers** (`whisper.cpp` / Parakeet).
-- ✨ **Optional LLM Text Cleanup:** Automatically fixes grammar, removes filler words (*um, uh, like*), and cleans up punctuation before auto-pasting.
-- 🔒 **Zero-Cloud Local Mode:** Run 100% offline transcription and LLM text polishing on Apple Silicon Metal GPU.
-- 🧹 **Automatic Pruning:** Non-blocking background cleanup for audio recordings older than 7 days.
+- ⚡ **Hotkey Toggle:** Press once to start dictation, press again to transcribe and paste into your frontmost app.
+- 🌐 **Multi-Provider Support:** Switch between Mistral AI, Groq Cloud, and local server backends.
+- ✨ **LLM Text Cleanup:** Fixes grammar, removes filler words (*um, uh*), and cleans punctuation before pasting.
+- 🔒 **Offline Local Mode:** Run speech recognition locally on Apple Silicon Metal GPU.
+- 🧹 **Automatic Cleanup:** Deletes recordings older than 7 days in the background.
 
-This workflow **REQUIRES** `sox` which you can install via homebrew:
+---
+
+## Prerequisites
+
+Install `sox` for audio recording:
 
 ```bash
 brew install sox
 ```
 
-`sox` is responsible for recording the audio. When you run the workflow for the first time via hotkey, you should see a permission box pop up asking to give microphone access to Alfred. During creation and testing, I didn't have see the dialog right away but after I went to sleep, and opened my MacBook's lid the next day, I was able to approve it.
+`sox` is responsible for recording the audio. When you run the workflow for the first time via hotkey, a macOS permission dialog should pop up asking to give microphone access to Alfred. During creation and testing, I didn't see the dialog right away. After I went to sleep and opened my MacBook's lid the next day, the permission prompt finally appeared and I approved it. I thought I should mention it, in case you're having a similar experience.If that doesn't work, try to reach out to me because I'd like to get a better idea about this macOS "feature."
 
-> NOTE: To make the workflow support a "toggle", and because it has to hand the recording off its operation to a background CLI tool, `sox` is being invoked, and **kept running** in the background. After each recording is done, the process will be gone too. If you experience any issus during setup, you might want to open Activity Monitor and check for any stray `sox` processes, and quit them. Shouldn't happen but if it does you know where to look.
+> NOTE: To support a toggle workflow, `sox` runs in the background while recording. Once recording stops, the process terminates. If you experience setup issues, check Activity Monitor for stray `sox` processes and quit them.
 
-This is the exact line that invokes `sox`:
+This is the exact code that invokes `sox`:
 
 ```bash
 # Detach stdin/stdout/stderr completely so Alfred subshell pipe closes instantly
 nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
 ```
 
+The `--buffer 32768` option reserves ~32 KB of RAM memory as a safety holding area. At 16 kHz 16-bit mono audio (32,000 bytes/sec), this provides roughly 1 second of RAM buffer to prevent dropped audio frames, clicks, or missing words if macOS briefly delays `sox` while Alfred runs background tasks.
+
 ---
 
-## Cloud Transcription & LLM Cleanup Setup
+## Cloud Setup (Mistral AI & Groq Cloud)
 
-Cloud-based API inference is supported out of the box using **Mistral AI** or **Groq Cloud**.
+Cloud providers offer the fastest setup and highest accuracy.
 
-### 1. Obtain API Keys
+### 1. API Keys
 
-Create an account and generate an API key from the provider's dashboard:
+Get an API key from your provider dashboard:
 
-- **Mistral AI:** [Mistral Console API Keys](https://console.mistral.ai/api-keys/)
-- **Groq Cloud:** [Groq Console API Keys](https://console.groq.com/keys)
+- **Mistral AI:** [Mistral Console](https://console.mistral.ai/api-keys/)
+- **Groq Cloud:** [Groq Console](https://console.groq.com/keys)
 
-### 2. Model Identifier Strings
+### 2. Model Configuration
 
-You must supply the exact model identifier string expected by each provider. You can find up-to-date model lists on each provider's website:
+Set the exact model string required by your provider in Alfred Workflow configuration:
 
-| Provider | Default Transcription Model | Default LLM Cleanup Model | Available Models & Documentation |
+| Provider | Default Transcription Model | Default Cleanup Model | Model Documentation |
 | --- | --- | --- | --- |
-| **Mistral AI** | `voxtral-mini-latest` | `mistral-small-latest` | [Mistral Models Documentation](https://docs.mistral.ai/getting-started/models/) |
-| **Groq Cloud** | `whisper-large-v3-turbo` | `llama-3.1-8b-instant` | [Groq Supported Models List](https://console.groq.com/docs/models) |
+| **Mistral AI** | `voxtral-mini-latest` | `mistral-small-latest` | [Mistral Models](https://docs.mistral.ai/getting-started/models/) |
+| **Groq Cloud** | `whisper-large-v3-turbo` | `llama-3.1-8b-instant` | [Groq Models](https://console.groq.com/docs/models) |
 
-> 💡 **Custom Models:** Set `TRANSCRIPTION_MODEL` and `CLEANUP_MODEL` in your Alfred Workflow configuration to use any supported model string from the provider's documentation.
+### Which one should you pick?
 
----
-
-## Local Transcription Setup Guide: Whisper vs. Parakeet (Optional Offline Mode)
-
-If you prefer zero-cloud, 100% offline local transcription on your Apple Silicon Metal GPU, follow this guide.
-
-You can choose between **Path A (Whisper.cpp)** or **Path B (Python Local Servers: Parakeet & Faster-Whisper)** depending on your engine preference.
+If you live in the EU, you might want to pick Mistral. Mistral is generally a bit slower than Groq. In all my months of using either Groq or Mistral I couldn't manage to get near my usage limits just by whispering on my Mac. If you don't care as much about supporting an EU company, you can also just as well use Groq. They are generally a bit faster, and their free tier is also more than enough for this kind of use case.
 
 ---
 
-## Model & Engine Decision Matrix
+## Local Setup (Offline Mode)
 
-| Engine Path | Primary Benefit | Installation Complexity | Server Binary |
+Run transcription locally on your Apple Silicon GPU using one of these engines:
+
+| Engine | Best For | Setup | Binary |
 | --- | --- | --- | --- |
-| **Path A: Whisper.cpp** | **Highest Accuracy & Formatting** (Best German/English mixed speech, punctuation) | **Easy** (Available via Homebrew) | `whisper-server` |
-| **Path B1: Faster-Whisper** | **Python Whisper Engine** (Fast CTranslate2 backend for Whisper models) | **Intermediate** (Python `venv` setup) | `faster-whisper-server` |
-| **Path B2: NVIDIA Parakeet** | **Highest Speed** (2x–4x faster inference, ultra-low RAM) | **Advanced** (Python `venv` + ONNX setup) | `sherpa-onnx` |
+| **Whisper.cpp** | German & English accuracy, proper punctuation | Homebrew | `whisper-server` |
+| **Faster-Whisper** | Python CTranslate2 engine | `venv` + `pip` | `faster-whisper-server` |
+| **NVIDIA Parakeet** | Inference speed and low memory | `venv` + ONNX | `sherpa-onnx` |
 
 ---
 
-## Path A: Setting Up Whisper Models (`whisper.cpp`)
+### Option A: Whisper.cpp
 
-### 1. Installation via Homebrew
+1. Install via Homebrew:
 
-```bash
-brew install whisper-cpp
-```
+   ```bash
+   brew install whisper-cpp
+   ```
 
-### 2. Download GGML Model File
+2. Download the base GGML model (~148 MB):
 
-Official `whisper.cpp` models are hosted on [HuggingFace (ggerganov/whisper.cpp)](https://huggingface.co/ggerganov/whisper.cpp/tree/main):
+   ```bash
+   mkdir -p ~/.models
+   curl -L -o ~/.models/ggml-base.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
+   ```
 
-```bash
-mkdir -p ~/.models
-# Download recommended base model (~148 MB)
-curl -L -o ~/.models/ggml-base.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
-```
+3. Launch server on port 8080:
 
-### 3. Launch Server
-
-```bash
-whisper-server -m ~/.models/ggml-base.bin --port 8080
-```
+   ```bash
+   whisper-server -m ~/.models/ggml-base.bin --port 8080
+   ```
 
 ---
 
-## Path B: Python Local Servers (`faster-whisper-server` & `sherpa-onnx`)
-
-> 💡 **Why Virtual Environments?**  
-> We use a Python virtual environment (`venv`) to keep all dependencies isolated in a single folder, ensuring they never interfere with system software.
-
-### 1. Create Folder & Isolated Virtual Environment
+### Option B1: Faster-Whisper (Python)
 
 ```bash
 mkdir -p ~/.local-transcribe-server
 cd ~/.local-transcribe-server
 python3 -m venv venv
 source venv/bin/activate
-```
 
-### 2. Option B1: Install & Run `faster-whisper-server` (Whisper Models)
-
-`faster-whisper-server` runs OpenAI Whisper models using CTranslate2 for high performance.
-
-```bash
 pip install --upgrade pip
 pip install faster-whisper-server
 
-# Launch faster-whisper server on port 8080
 faster-whisper-server --host 127.0.0.1 --port 8080 --model base
 ```
 
 ---
 
-### 3. Option B2: Install & Run `sherpa-onnx` (NVIDIA Parakeet Models)
+### Option B2: NVIDIA Parakeet (Sherpa-ONNX)
 
-- **NVIDIA Models (`.nemo`):** Raw original weights trained by NVIDIA (requires PyTorch / CUDA).
-- **Sherpa-ONNX Models (`.onnx`):** Converted ONNX version of the same NVIDIA weights, optimized for macOS Apple Silicon.
+Sherpa-ONNX runs NVIDIA Parakeet models converted to ONNX, optimized for Apple Silicon Metal GPU:
 
 ```bash
+mkdir -p ~/.local-transcribe-server
+cd ~/.local-transcribe-server
+python3 -m venv venv
+source venv/bin/activate
+
 pip install --upgrade pip
 pip install sherpa-onnx
 
-# Download Sherpa-ONNX Parakeet model for Mac
 mkdir -p models
 curl -L -o models/model.onnx https://huggingface.co/csukuangfj/sherpa-onnx-nemo-parakeet-tdnn-en-2023-05-23/resolve/main/model.onnx
 
-# Launch Sherpa-ONNX Parakeet server on port 8080
 sherpa-onnx-offline-http-server --port=8080 --model=~/.local-transcribe-server/models/model.onnx
 ```
 
@@ -150,18 +139,16 @@ sherpa-onnx-offline-http-server --port=8080 --model=~/.local-transcribe-server/m
 
 ## Alfred Workflow Configuration
 
-Regardless of whether you choose **Cloud (Mistral/Groq)** or **Local (Path A/B)**:
-
-1. Open **Alfred Preferences** -> **Workflows** -> **Whisper Alfred** -> **Configure Workflow**.
-2. Set **`TRANSCRIPTION_PROVIDER`** = `mistral`, `groq`, or `local`.
+1. Open **Alfred Preferences -> Workflows -> Whisper Alfred -> Configure Workflow**.
+2. Set **`TRANSCRIPTION_PROVIDER`** (`mistral`, `groq`, or `local`).
 3. Set your API Key (**`MISTRAL_API_KEY`** / **`GROQ_API_KEY`**) or Local Endpoint (**`PARAKEET_ENDPOINT`** = `http://127.0.0.1:8080/v1/audio/transcriptions`).
-4. (Optional) Set **`TRANSCRIPTION_MODEL`** and **`CLEANUP_MODEL`** to override defaults with custom model strings.
+4. (Optional) Set **`TRANSCRIPTION_MODEL`** and **`CLEANUP_MODEL`** to override defaults.
 
 ---
 
-## Error Handling & Server Status
+## Error Handling
 
-If your local server is offline or stopped when triggering the Hotkey, `alfred-transcribe` will paste a friendly notification message into your frontmost application:
+If a local server is offline when triggering dictation, Whisper Alfred pastes an error notification into your active application:
 
 ```text
 [Whisper Alfred Error: Could not connect to local server on http://127.0.0.1:8080/v1/audio/transcriptions. Please verify your local server is running.]
