@@ -75,7 +75,22 @@
 - **Automatically paste to frontmost app:** Checked (`true`).
 - **Mark transient in clipboard history:** Checked.
 
-### 8. Workflow Configuration Variables
+### 8. Run Script: Background Pruner (`scripts/prune.sh auto &`)
+
+- **Language:** `/bin/zsh`
+- **Script:** `./scripts/prune.sh auto &`
+- **Description:** Non-blocking background retention check. Removes audio recordings and JSON sidecars older than `RETENTION_DAYS`.
+
+### 9. Keyword Triggers
+
+- **`whisper open`**: Executes `./scripts/open_recordings.sh` to open recordings directory in Finder.
+- **`whisper prune`**: Executes `./scripts/prune.sh "{query}"`.
+  - Empty / `prune`: Full purge of all `.wav` and `.json` recordings.
+  - `recordings`: Deletes `.wav` audio files only.
+  - `archive`: Moves recordings to `archive/` directory.
+  - `<N>`: Deletes recordings older than $N$ days.
+
+### 10. Workflow Configuration Variables
 
 | Variable | Default Value | Description |
 | --- | --- | --- |
@@ -85,3 +100,4 @@
 | `PARAKEET_ENDPOINT` | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint for local Parakeet model |
 | `ENABLE_CLEANUP` | `false` | Enable LLM text polish (`true`/`false`) |
 | `RETENTION_DAYS` | `7` | Retention period in days for audio files |
+
