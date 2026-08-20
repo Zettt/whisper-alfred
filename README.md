@@ -11,8 +11,9 @@ Whisper into any text field on your Mac using **Mistral AI**, **Groq Cloud**, or
 - ⚡ **One-Hotkey Toggle:** Press hotkey once to start dictation, press again to transcribe and auto-paste into your active app.
 - 🌐 **Multi-Provider Support:** Switch between **Mistral AI** (`voxtral-mini`), **Groq Cloud** (`whisper-large-v3-turbo`), and **Local AI Servers** (`whisper.cpp` / Parakeet).
 - ✨ **Optional LLM Text Cleanup:** Automatically fixes grammar, removes filler words (*um, uh, like*), and cleans up punctuation before auto-pasting.
+- 📜 **JSON Sidecar Archiving:** Automatically stores structured `.json` sidecar files containing both raw and polished transcripts alongside audio recordings.
 - 🔒 **Zero-Cloud Local Mode:** Run 100% offline transcription and LLM text polishing on Apple Silicon Metal GPU.
-- 🧹 **Automatic Pruning:** Non-blocking background cleanup for audio recordings older than 7 days.
+- 🧹 **Automatic Pruning:** Non-blocking background cleanup for audio `.wav` recordings and `.json` sidecars older than 7 days.
 
 ---
 
@@ -54,7 +55,7 @@ Configure these in **Alfred Preferences** -> **Workflows** -> **Alfred Transcrib
 ### 🧹 Maintenance Settings
 | Control / Variable | Description | Default |
 |---|---|---|
-| `RETENTION_DAYS` | Days to keep `.wav` recordings before auto-deletion | `7` |
+| `RETENTION_DAYS` | Days to keep `.wav` recordings & `.json` sidecars before auto-deletion | `7` |
 
 ---
 

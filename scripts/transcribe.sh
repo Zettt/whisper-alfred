@@ -14,6 +14,12 @@ if [[ -z "$AUDIO_FILE" || ! -f "$AUDIO_FILE" ]]; then
 fi
 
 PROVIDER="${TRANSCRIPTION_PROVIDER:-mistral}"
+CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/transcribe}"
+mkdir -p "$CACHE_DIR"
+
+TEXT=""
+MODEL=""
+ENDPOINT=""
 
 case "$PROVIDER" in
 mistral)
@@ -45,8 +51,6 @@ mistral)
                 }
             }
         ' "$RESPONSE")
-
-	printf "%s" "$TEXT"
 	;;
 
 groq)
@@ -79,8 +83,6 @@ groq)
                 }
             }
         ' "$RESPONSE")
-
-	printf "%s" "$TEXT"
 	;;
 
 local | parakeet)
@@ -111,8 +113,6 @@ local | parakeet)
                 }
             }
         ' "$RESPONSE" "$ENDPOINT")
-
-	printf "%s" "$TEXT"
 	;;
 
 *)
@@ -120,3 +120,35 @@ local | parakeet)
 	exit 1
 	;;
 esac
+
+# Create matching JSON sidecar file alongside .wav
+JSON_FILE="${AUDIO_FILE%.wav}.json"
+TIMESTAMP_ISO=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+osascript -l JavaScript -e '
+    function run(argv) {
+        var fs = $.NSFileManager.defaultManager;
+        var data = {
+            timestamp: argv[0],
+            audio_file: argv[1],
+            transcription: {
+                provider: argv[2],
+                model: argv[3],
+                raw_text: argv[4]
+            },
+            cleanup: {
+                enabled: false,
+                provider: null,
+                model: null,
+                polished_text: null
+            }
+        };
+        var str = $.NSString.stringWithString(JSON.stringify(data, null, 2));
+        str.writeToFileAtomicallyEncodingError(argv[5], true, $.NSUTF8StringEncoding, null);
+    }
+' "$TIMESTAMP_ISO" "$AUDIO_FILE" "$PROVIDER" "$MODEL" "$TEXT" "$JSON_FILE" 2>/dev/null || true
+
+# Store active JSON sidecar pointer in cache for polish script
+echo "$JSON_FILE" > "$CACHE_DIR/latest_sidecar.txt"
+
+printf "%s" "$TEXT"

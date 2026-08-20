@@ -18,8 +18,10 @@ if [[ -z "$TEXT_INPUT" ]]; then
 fi
 
 ENABLE="${ENABLE_CLEANUP:-false}"
+CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/transcribe}"
+LATEST_SIDECAR="$CACHE_DIR/latest_sidecar.txt"
 
-if [[ "$ENABLE" != "true" ]]; then
+if [[ "$ENABLE" != "1" && "$ENABLE" != "true" ]]; then
 	printf "%s" "$TEXT_INPUT"
 	exit 0
 fi
@@ -96,8 +98,35 @@ POLISHED=$(osascript -l JavaScript -e '
     }
 ' "$RESPONSE")
 
+FINAL_TEXT="$TEXT_INPUT"
 if [[ -n "$POLISHED" ]]; then
-	printf "%s" "$POLISHED"
-else
-	printf "%s" "$TEXT_INPUT"
+	FINAL_TEXT="$POLISHED"
 fi
+
+# Update matching JSON sidecar file with cleanup metadata if available
+if [[ -f "$LATEST_SIDECAR" ]]; then
+	JSON_FILE=$(cat "$LATEST_SIDECAR" | tr -d '\r\n')
+	if [[ -f "$JSON_FILE" ]]; then
+		osascript -l JavaScript -e '
+            function run(argv) {
+                try {
+                    var jsonPath = argv[0];
+                    var content = $.NSString.stringWithContentsOfFileEncodingError(jsonPath, $.NSUTF8StringEncoding, null);
+                    if (content) {
+                        var data = JSON.parse(content.js);
+                        data.cleanup = {
+                            enabled: true,
+                            provider: argv[1],
+                            model: argv[2],
+                            polished_text: argv[3]
+                        };
+                        var str = $.NSString.stringWithString(JSON.stringify(data, null, 2));
+                        str.writeToFileAtomicallyEncodingError(jsonPath, true, $.NSUTF8StringEncoding, null);
+                    }
+                } catch(e) {}
+            }
+        ' "$JSON_FILE" "$PROVIDER" "$MODEL" "$FINAL_TEXT" 2>/dev/null || true
+	fi
+fi
+
+printf "%s" "$FINAL_TEXT"

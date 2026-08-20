@@ -1,13 +1,18 @@
 #!/bin/zsh
 
-# Audio Retention Pruner for Alfred Workflow
-# Purges recorded WAV files older than RETENTION_DAYS
+# Audio & Metadata Sidecar Retention Pruner for Alfred Workflow
+# Deletes old audio recordings (.wav) and metadata sidecars (.json) based on RETENTION_DAYS variable
 
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 DATA_DIR="${alfred_workflow_data:-$HOME/Library/Application Support/Alfred/Workflow Data/transcribe}"
-RETENTION_DAYS="${RETENTION_DAYS:-7}"
+RECORDINGS_DIR="$DATA_DIR/recordings"
 
-if [[ -d "$DATA_DIR/recordings" && "$RETENTION_DAYS" -gt 0 ]]; then
-    find "$DATA_DIR/recordings" -name "*.wav" -type f -mtime +"$RETENTION_DAYS" -delete 2>/dev/null || true
+if [[ ! -d "$RECORDINGS_DIR" ]]; then
+	exit 0
 fi
+
+DAYS="${RETENTION_DAYS:-7}"
+
+# Delete WAV audio files and JSON sidecar files older than RETENTION_DAYS
+find "$RECORDINGS_DIR" -type f \( -name "*.wav" -o -name "*.json" \) -mtime +${DAYS} -delete 2>/dev/null || true
