@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# LLM Text Polish Script for Alfred Workflow
+# LLM Text Cleanup Script for Alfred Workflow
 # Supports Mistral AI, Groq, and Local Ollama / LocalAI LLM endpoints
 
 set -e
@@ -24,7 +24,7 @@ if [[ "$ENABLE" != "true" ]]; then
 	exit 0
 fi
 
-PROVIDER="${POLISH_PROVIDER:-mistral}"
+PROVIDER="${CLEANUP_PROVIDER:-${POLISH_PROVIDER:-mistral}}"
 
 case "$PROVIDER" in
 mistral)
@@ -32,7 +32,7 @@ mistral)
 		printf "%s" "$TEXT_INPUT"
 		exit 0
 	fi
-	MODEL="${POLISH_MODEL:-mistral-small-latest}"
+	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-mistral-small-latest}}"
 	ENDPOINT="https://api.mistral.ai/v1/chat/completions"
 	AUTH_HEADER="Authorization: Bearer $MISTRAL_API_KEY"
 	;;
@@ -42,14 +42,14 @@ groq)
 		printf "%s" "$TEXT_INPUT"
 		exit 0
 	fi
-	MODEL="${POLISH_MODEL:-llama-3.1-8b-instant}"
+	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-llama-3.1-8b-instant}}"
 	ENDPOINT="https://api.groq.com/openai/v1/chat/completions"
 	AUTH_HEADER="Authorization: Bearer $GROQ_API_KEY"
 	;;
 
 local)
-	MODEL="${POLISH_MODEL:-llama3.2}"
-	ENDPOINT="${LOCAL_LLM_ENDPOINT:-http://127.0.0.1:11434/v1/chat/completions}"
+	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-llama3.2}}"
+	ENDPOINT="${LOCAL_CLEANUP_ENDPOINT:-${LOCAL_LLM_ENDPOINT:-http://127.0.0.1:11434/v1/chat/completions}}"
 	AUTH_HEADER="Authorization: Bearer local"
 	;;
 

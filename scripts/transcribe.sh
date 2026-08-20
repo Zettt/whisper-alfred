@@ -80,7 +80,7 @@ groq)
 	;;
 
 local | parakeet)
-	ENDPOINT="${PARAKEET_ENDPOINT:-${LOCAL_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}}"
+	ENDPOINT="${LOCAL_TRANSCRIPTION_ENDPOINT:-${LOCAL_ENDPOINT:-${PARAKEET_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}}}"
 
 	# Connect with 2-second timeout to handle unstarted local server gracefully
 	RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \
