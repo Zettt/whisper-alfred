@@ -22,7 +22,7 @@ if [[ -f "$PID_FILE" ]]; then
     PID=$(cat "$PID_FILE")
     if kill -0 "$PID" 2>/dev/null; then
         # Recording is running - send SIGINT to stop gracefully
-        kill -2 "$PID"
+        kill -2 "$PID" 2>/dev/null || true
         
         # Wait until process exits
         while kill -0 "$PID" 2>/dev/null; do
@@ -38,18 +38,20 @@ if [[ -f "$PID_FILE" ]]; then
         fi
         exit 0
     else
-        # Stale PID file cleanup
+        # Stale PID cleanup
         rm -f "$PID_FILE"
     fi
 fi
 
-# Start recording using native macOS CoreAudio device resampler
+# Start recording with allocated buffer size 32768 to prevent CoreAudio buffer overruns
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 AUDIO_PATH="$DATA_DIR/recordings/${TIMESTAMP}.wav"
 
 printf "%s" "$AUDIO_PATH" > "$CURRENT_FILE"
 
-nohup sox -q -d -c 1 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 &
+# Detach stdin/stdout/stderr completely so Alfred subshell pipe closes instantly
+nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
+disown $! 2>/dev/null || true
 echo $! > "$PID_FILE"
 
 # Output empty string when starting recording
