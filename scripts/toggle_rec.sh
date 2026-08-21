@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Toggle Recording Script for Alfred Workflow
-# Dependency: sox CLI (Homebrew: brew install sox)
+# Dependency: ffmpeg CLI (Homebrew: brew install ffmpeg) or sox CLI
 
 set -e
 
@@ -43,14 +43,19 @@ if [[ -f "$PID_FILE" ]]; then
     fi
 fi
 
-# Start recording with allocated buffer size 32768 to prevent CoreAudio buffer overruns
+# Start recording with allocated buffer size to prevent CoreAudio overruns
+AUDIO_FORMAT="${AUDIO_FORMAT:-m4a}"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-AUDIO_PATH="$DATA_DIR/recordings/${TIMESTAMP}.wav"
+AUDIO_PATH="$DATA_DIR/recordings/${TIMESTAMP}.${AUDIO_FORMAT}"
 
 printf "%s" "$AUDIO_PATH" > "$CURRENT_FILE"
 
 # Detach stdin/stdout/stderr completely so Alfred subshell pipe closes instantly
-nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
+if command -v ffmpeg >/dev/null 2>&1 && [[ "$AUDIO_FORMAT" == "m4a" || "$AUDIO_FORMAT" == "mp4" || "$AUDIO_FORMAT" == "aac" ]]; then
+    nohup ffmpeg -hide_banner -loglevel error -y -f avfoundation -i ":default" -ar 16000 -ac 1 -c:a aac -b:a 64k "$AUDIO_PATH" >"$LOG_FILE" 2>&1 </dev/null &
+else
+    nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
+fi
 disown $! 2>/dev/null || true
 echo $! > "$PID_FILE"
 

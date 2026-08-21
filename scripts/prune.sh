@@ -23,26 +23,26 @@ ARG="${RAW_ARG#prune}"
 ARG=$(echo "$ARG" | xargs)
 
 case "$ARG" in
-	"recordings" | "wav" | "audio")
-		find "$RECORDINGS_DIR" -type f -name "*.wav" -delete 2>/dev/null || true
-		printf "Deleted all audio (.wav) files. JSON sidecars preserved."
+	"recordings" | "wav" | "m4a" | "audio")
+		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" \) -delete 2>/dev/null || true
+		printf "Deleted all audio files. JSON sidecars preserved."
 		;;
 	"archive")
 		mkdir -p "$ARCHIVE_DIR"
-		find "$RECORDINGS_DIR" -type f \( -name "*.wav" -o -name "*.json" \) -exec mv {} "$ARCHIVE_DIR/" \; 2>/dev/null || true
+		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -exec mv {} "$ARCHIVE_DIR/" \; 2>/dev/null || true
 		printf "Archived all recordings to %s" "$ARCHIVE_DIR"
 		;;
 	"auto" | "retention")
 		DAYS="${RETENTION_DAYS:-7}"
-		find "$RECORDINGS_DIR" -type f \( -name "*.wav" -o -name "*.json" \) -mtime +${DAYS} -delete 2>/dev/null || true
+		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -mtime +${DAYS} -delete 2>/dev/null || true
 		printf "Pruned recordings older than %s days." "$DAYS"
 		;;
 	*)
 		if [[ "$ARG" =~ ^[0-9]+$ ]]; then
-			find "$RECORDINGS_DIR" -type f \( -name "*.wav" -o -name "*.json" \) -mtime +${ARG} -delete 2>/dev/null || true
+			find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -mtime +${ARG} -delete 2>/dev/null || true
 			printf "Pruned recordings older than %s days." "$ARG"
 		else
-			find "$RECORDINGS_DIR" -type f \( -name "*.wav" -o -name "*.json" \) -delete 2>/dev/null || true
+			find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -delete 2>/dev/null || true
 			printf "Purged all audio recordings and JSON sidecars."
 		fi
 		;;

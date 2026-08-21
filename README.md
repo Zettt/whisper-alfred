@@ -1,9 +1,11 @@
+# Whisper Alfred 🎙️
+
 ## Setup
 
-Install `sox` for audio recording via Homebrew:
+Install `ffmpeg` (recommended for MPEG-4 `.m4a` recording) or `sox` via Homebrew:
 
 ```bash
-brew install sox
+brew install ffmpeg sox
 ```
 
 *Note: macOS will prompt for Microphone permissions on first run. Ensure Alfred has microphone access under System Settings → Privacy & Security → Microphone.*
@@ -18,7 +20,7 @@ Alternatively, manage workflow recordings via keywords:
 
 * `whisper`: Trigger dictation recording manually via keyword.
 * `whisper open`: Open the workflow’s recordings directory in Finder.
-* `whisper prune`: Delete local recordings and sidecars (supports optional arguments: `recordings` to delete only `.wav` files, `archive` to archive files, `auto` for retention check, or a number `N` to delete files older than N days).
+* `whisper prune`: Delete local recordings and sidecars (supports optional arguments: `recordings` to delete only audio files, `archive` to archive files, `auto` for retention check, or a number `N` to delete files older than N days).
 
 ### Features
 
@@ -52,19 +54,20 @@ Set provider keys, endpoints, models, and retention settings in the Workflow’s
 | Environment Variable | Default Value | Description |
 | --- | --- | --- |
 | **`TRANSCRIPTION_PROVIDER`** | `mistral` | Transcription backend (`mistral`, `groq`, or `local`). |
+| **`AUDIO_FORMAT`** | `m4a` | Audio recording container format (`m4a` or `wav`). |
 | **`MISTRAL_API_KEY`** | *(empty)* | API Key for Mistral AI backend. |
 | **`GROQ_API_KEY`** | *(empty)* | API Key for Groq Cloud backend. |
 | **`PARAKEET_ENDPOINT`** | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint URL for local server transcription. |
 | **`TRANSCRIPTION_MODEL`** | *(provider default)* | Override default transcription model string. |
 | **`CLEANUP_MODEL`** | *(provider default)* | Override default LLM text cleanup model string. |
-| **`RETENTION_DAYS`** | `7` | Days to keep local `.wav` recordings and metadata sidecars before auto-pruning. |
+| **`RETENTION_DAYS`** | `7` | Days to keep local audio recordings and metadata sidecars before auto-pruning. |
 
 ## Technical & Audio Recording Details
 
-The workflow invokes `sox` with a dedicated 32 KB RAM buffer (`--buffer 32768`) to prevent dropped audio frames or CoreAudio overruns on macOS:
+By default, the workflow uses `ffmpeg` to capture 16kHz mono audio directly into compressed MPEG-4 (`.m4a` AAC) format to maximize upload speed and reduce disk usage by 80%+ while remaining fully compatible with Groq, Mistral, and Faster-Whisper:
 
 ```bash
-nohup sox --buffer 32768 -q -d -c 1 -b 16 "$AUDIO_PATH" rate 16000 >"$LOG_FILE" 2>&1 </dev/null &
+nohup ffmpeg -hide_banner -loglevel error -y -f avfoundation -i ":default" -ar 16000 -ac 1 -c:a aac -b:a 64k "$AUDIO_PATH" >"$LOG_FILE" 2>&1 </dev/null &
 ```
 
 If a local server is offline when triggering dictation, Whisper Alfred pastes an error notification into your active application:

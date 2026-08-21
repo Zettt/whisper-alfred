@@ -121,8 +121,8 @@ local | parakeet)
 	;;
 esac
 
-# Create matching JSON sidecar file alongside .wav
-JSON_FILE="${AUDIO_FILE%.wav}.json"
+# Create matching JSON sidecar file alongside audio file
+JSON_FILE="${AUDIO_FILE%.*}.json"
 TIMESTAMP_ISO=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 osascript -l JavaScript -e '
