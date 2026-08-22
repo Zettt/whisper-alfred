@@ -2,10 +2,10 @@
 
 ## Setup
 
-Install `ffmpeg` (recommended for MPEG-4 `.m4a` recording) or `sox` via Homebrew:
+Install `ffmpeg` via Homebrew:
 
 ```bash
-brew install ffmpeg sox
+brew install ffmpeg
 ```
 
 *Note: macOS will prompt for Microphone permissions on first run. Ensure Alfred has microphone access under System Settings → Privacy & Security → Microphone.*

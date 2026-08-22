@@ -21,6 +21,64 @@ TEXT=""
 MODEL=""
 ENDPOINT=""
 
+trim() {
+	local var="$*"
+	var="${var#"${var%%[![:space:]]*}"}"
+	var="${var%"${var##*[![:space:]]}"}"
+	printf '%s' "$var"
+}
+
+parse_json_transcription() {
+	local resp="$1"
+	local endpoint="$2"
+	local err text
+
+	if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
+		err=$(printf "%s" "$resp" | jq -r '.error // empty' 2>/dev/null)
+		if [[ -n "$err" ]]; then
+			if [[ "$err" == "LOCAL_SERVER_OFFLINE" ]]; then
+				printf "%s" "[Whisper Alfred Error: Could not connect to local server on ${endpoint}. Please verify your local server is running.]"
+			else
+				printf "%s" "[Whisper Alfred Error: API error]"
+			fi
+			return
+		fi
+		text=$(printf "%s" "$resp" | jq -r '.text // empty' 2>/dev/null)
+		trim "$text"
+		return
+	fi
+
+	# Fallback to macOS plutil
+	err=$(plutil -extract error raw -o - - <<< "$resp" 2>/dev/null || true)
+	if [[ -n "$err" && "$err" != "(null)" ]]; then
+		if [[ "$err" == "LOCAL_SERVER_OFFLINE" ]]; then
+			printf "%s" "[Whisper Alfred Error: Could not connect to local server on ${endpoint}. Please verify your local server is running.]"
+		else
+			printf "%s" "[Whisper Alfred Error: API error]"
+		fi
+		return
+	fi
+
+	text=$(plutil -extract text raw -o - - <<< "$resp" 2>/dev/null || true)
+	if [[ -n "$text" && "$text" != "(null)" ]]; then
+		trim "$text"
+	fi
+}
+
+escape_json_val() {
+	if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
+		printf '%s' "$1" | jq -R -s '.'
+	else
+		local str="$1"
+		str="${str//\\/\\\\}"
+		str="${str//\"/\\\"}"
+		str="${str//$'\n'/\\n}"
+		str="${str//$'\r'/\\r}"
+		str="${str//$'\t'/\\t}"
+		printf '"%s"' "$str"
+	fi
+}
+
 case "$PROVIDER" in
 mistral)
 	if [[ -z "$MISTRAL_API_KEY" ]]; then
@@ -35,22 +93,7 @@ mistral)
 		--form "file=@$AUDIO_FILE" \
 		--form "model=\"$MODEL\"")
 
-	TEXT=$(osascript -l JavaScript -e '
-            function run(argv) {
-                try {
-                    var resp = JSON.parse(argv[0]);
-                    if (resp.error) {
-                        return "[Whisper Alfred Error: Mistral API error]";
-                    }
-                    if (resp.text) {
-                        return resp.text.trim();
-                    }
-                    return "";
-                } catch(e) {
-                    return "";
-                }
-            }
-        ' "$RESPONSE")
+	TEXT=$(parse_json_transcription "$RESPONSE")
 	;;
 
 groq)
@@ -67,22 +110,7 @@ groq)
 		-F "model=$MODEL" \
 		-F "response_format=json")
 
-	TEXT=$(osascript -l JavaScript -e '
-            function run(argv) {
-                try {
-                    var resp = JSON.parse(argv[0]);
-                    if (resp.error) {
-                        return "[Whisper Alfred Error: Groq API error]";
-                    }
-                    if (resp.text) {
-                        return resp.text.trim();
-                    }
-                    return "";
-                } catch(e) {
-                    return "";
-                }
-            }
-        ' "$RESPONSE")
+	TEXT=$(parse_json_transcription "$RESPONSE")
 	;;
 
 local | parakeet)
@@ -94,25 +122,7 @@ local | parakeet)
 		-F "file=@$AUDIO_FILE" \
 		-F "model=$MODEL" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
 
-	TEXT=$(osascript -l JavaScript -e '
-            function run(argv) {
-                try {
-                    var resp = JSON.parse(argv[0]);
-                    if (resp.error) {
-                        if (resp.error === "LOCAL_SERVER_OFFLINE") {
-                            return "[Whisper Alfred Error: Could not connect to local server on " + argv[1] + ". Please verify your local server is running.]";
-                        }
-                        return "[Whisper Alfred Error: Local server error]";
-                    }
-                    if (resp.text) {
-                        return resp.text.trim();
-                    }
-                    return "";
-                } catch(e) {
-                    return "";
-                }
-            }
-        ' "$RESPONSE" "$ENDPOINT")
+	TEXT=$(parse_json_transcription "$RESPONSE" "$ENDPOINT")
 	;;
 
 *)
@@ -121,34 +131,38 @@ local | parakeet)
 	;;
 esac
 
-# Create matching JSON sidecar file alongside audio file
+# Sidecar metadata file path alongside audio file
 JSON_FILE="${AUDIO_FILE%.*}.json"
 TIMESTAMP_ISO=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-osascript -l JavaScript -e '
-    function run(argv) {
-        var fs = $.NSFileManager.defaultManager;
-        var data = {
-            timestamp: argv[0],
-            audio_file: argv[1],
-            transcription: {
-                provider: argv[2],
-                model: argv[3],
-                raw_text: argv[4]
-            },
-            cleanup: {
-                enabled: false,
-                provider: null,
-                model: null,
-                polished_text: null
-            }
-        };
-        var str = $.NSString.stringWithString(JSON.stringify(data, null, 2));
-        str.writeToFileAtomicallyEncodingError(argv[5], true, $.NSUTF8StringEncoding, null);
-    }
-' "$TIMESTAMP_ISO" "$AUDIO_FILE" "$PROVIDER" "$MODEL" "$TEXT" "$JSON_FILE" 2>/dev/null || true
 
 # Store active JSON sidecar pointer in cache for polish script
 echo "$JSON_FILE" > "$CACHE_DIR/latest_sidecar.txt"
 
+# Output transcription immediately to stdout for Alfred
 printf "%s" "$TEXT"
+
+# Asynchronously write matching JSON sidecar file in background
+(
+	JSON_AUDIO=$(escape_json_val "$AUDIO_FILE")
+	JSON_PROV=$(escape_json_val "$PROVIDER")
+	JSON_MODEL=$(escape_json_val "$MODEL")
+	JSON_TEXT=$(escape_json_val "$TEXT")
+
+	cat <<EOF > "$JSON_FILE"
+{
+  "timestamp": "$TIMESTAMP_ISO",
+  "audio_file": $JSON_AUDIO,
+  "transcription": {
+    "provider": $JSON_PROV,
+    "model": $JSON_MODEL,
+    "raw_text": $JSON_TEXT
+  },
+  "cleanup": {
+    "enabled": false,
+    "provider": null,
+    "model": null,
+    "polished_text": null
+  }
+}
+EOF
+) >/dev/null 2>&1 &!

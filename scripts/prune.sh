@@ -4,7 +4,7 @@
 # Supports arguments ($1):
 #   (empty) / auto / text -> Retention check (deletes files older than RETENTION_DAYS, default: 7)
 #   force / all / purge / 0 -> Purges ALL recordings & sidecars immediately
-#   recordings / wav / m4a  -> Deletes only audio files, keeping JSON sidecars
+#   recordings / m4a / audio -> Deletes only audio files, keeping JSON sidecars
 #   archive                 -> Moves recordings & sidecars to $DATA_DIR/archive/
 #   N (number)              -> Prunes files older than N days
 

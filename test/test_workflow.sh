@@ -28,7 +28,7 @@ MOCK_M4A="$alfred_workflow_data/recordings/mock_sample.m4a"
 
 touch "$MOCK_M4A"
 
-sleep 10 &
+(trap 'exit 0' INT; while true; do sleep 0.05; done) &
 MOCK_PID=$!
 
 echo "$MOCK_PID" > "$PID_FILE"
@@ -126,5 +126,52 @@ else
     exit 1
 fi
 rm -f "$FRESH_M4A"
+
+# Test 8: Transcribe error handling and async sidecar creation with jq
+TRANS_AUDIO="$alfred_workflow_data/recordings/test_trans.m4a"
+touch "$TRANS_AUDIO"
+TRANS_OUT=$(TRANSCRIPTION_PROVIDER="local" LOCAL_TRANSCRIPTION_ENDPOINT="http://127.0.0.1:59999" ./scripts/transcribe.sh "$TRANS_AUDIO")
+if [[ "$TRANS_OUT" =~ "Could not connect to local server" ]]; then
+    echo "[PASS] Transcribe script (jq) handles offline endpoint gracefully"
+else
+    echo "[FAIL] Transcribe script (jq) error handling failed: '$TRANS_OUT'"
+    exit 1
+fi
+sleep 0.1
+if [[ -f "${TRANS_AUDIO%.*}.json" ]]; then
+    echo "[PASS] Transcribe script (jq) wrote sidecar JSON asynchronously"
+else
+    echo "[FAIL] Transcribe sidecar JSON was not created"
+    exit 1
+fi
+rm -f "$TRANS_AUDIO" "${TRANS_AUDIO%.*}".json
+
+# Test 9: Transcribe error handling and async sidecar with plutil fallback (FORCE_PLUTIL=1)
+TRANS_AUDIO_PLUTIL="$alfred_workflow_data/recordings/test_trans_plutil.m4a"
+touch "$TRANS_AUDIO_PLUTIL"
+TRANS_OUT_PLUTIL=$(FORCE_PLUTIL=1 TRANSCRIPTION_PROVIDER="local" LOCAL_TRANSCRIPTION_ENDPOINT="http://127.0.0.1:59999" ./scripts/transcribe.sh "$TRANS_AUDIO_PLUTIL")
+if [[ "$TRANS_OUT_PLUTIL" =~ "Could not connect to local server" ]]; then
+    echo "[PASS] Transcribe script (plutil fallback) handles offline endpoint gracefully"
+else
+    echo "[FAIL] Transcribe script (plutil fallback) error handling failed: '$TRANS_OUT_PLUTIL'"
+    exit 1
+fi
+sleep 0.1
+if [[ -f "${TRANS_AUDIO_PLUTIL%.*}.json" ]]; then
+    echo "[PASS] Transcribe script (plutil fallback) wrote sidecar JSON asynchronously"
+else
+    echo "[FAIL] Transcribe plutil sidecar JSON was not created"
+    exit 1
+fi
+rm -f "$TRANS_AUDIO_PLUTIL" "${TRANS_AUDIO_PLUTIL%.*}".json
+
+# Test 10: Polish script with plutil fallback
+POLISH_PLUTIL_OUT=$(FORCE_PLUTIL=1 ENABLE_CLEANUP="false" ./scripts/polish.sh "Hello plutil world test")
+if [[ "$POLISH_PLUTIL_OUT" == "Hello plutil world test" ]]; then
+    echo "[PASS] Polish script (plutil fallback) passes through input correctly"
+else
+    echo "[FAIL] Polish plutil output unexpected: '$POLISH_PLUTIL_OUT'"
+    exit 1
+fi
 
 echo "=== All Tests Passed Successfully ==="
