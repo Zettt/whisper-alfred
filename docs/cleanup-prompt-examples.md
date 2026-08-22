@@ -10,9 +10,11 @@ This document records transcription post-processing prompt strategies from vario
 Clean up the dictated text for readability. Fix punctuation, grammar, and formatting while preserving the original meaning and language. Return only the cleaned text.
 ```
 
-### Analysis
-* **Pros**: Simple and concise.
-* **Cons**: Directing the LLM to prioritize "readability" and "fix grammar" causes models to rewrite sentences, alter informal cadence, and substitute vocabulary.
+### 1: Analysis
+
+- **Pros**: Simple and concise.
+
+- **Cons**: Directing the LLM to prioritize "readability" and "fix grammar" causes models to rewrite sentences, alter informal cadence, and substitute vocabulary.
 
 ---
 
@@ -26,9 +28,11 @@ Polish the dictated speech in <USER_MESSAGE> into clean, general-purpose text.
 - Prefer a clean, neutral style unless the dictated speech clearly implies a different tone.
 ```
 
-### Analysis
-* **Pros**: Explicit rules structure.
-* **Cons**: Instructing the model to "prefer a clean, neutral style" forces style neutralization, stripping the speaker's original voice, slang, emphasis, or colloquial phrasing.
+### 2: Analysis
+
+- **Pros**: Explicit rules structure.
+
+- **Cons**: Instructing the model to "prefer a clean, neutral style" forces style neutralization, stripping the speaker's original voice, slang, emphasis, or colloquial phrasing.
 
 ---
 
@@ -44,8 +48,9 @@ You are a voice transcript polisher. Clean up the provided text:
 - Output ONLY the polished text with no preamble.
 ```
 
-### Analysis
-* **Pros**:
+### 3: Analysis
+
+- **Pros**:
   1. **Perspective Guardrail**: Explicitly prevents LLMs from shifting pronouns ("I" to "you") or acting as an assistant responding to commands in dictated speech.
   2. **Language Lockdown**: Strict rule preventing unwanted auto-translation for multilingual dictation.
   3. **Non-Native Phrasing Support**: Allows minor vocabulary/grammar improvements for natural phrasing without full-sentence rewrites.

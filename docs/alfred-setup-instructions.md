@@ -94,26 +94,30 @@ Click the **Configure Workflow** button (top right of workflow window) and add:
 ## 4. Add Keyword Triggers
 
 ### Keyword Trigger: `whisper open`
+
 - Right-click -> **Inputs** -> **Keyword**.
 - Keyword: `whisper open` (Space required/optional).
 - Title: `Open Recordings Folder`
 - Connect to **Run Script**:
+
   ```zsh
   ./scripts/open_recordings.sh
   ```
 
 ### Keyword Trigger: `whisper prune`
+
 - Right-click -> **Inputs** -> **Keyword**.
 - Keyword: `whisper prune` (Space optional).
 - Title: `Prune All Recorded Files`
 - Connect to **Run Script**:
+
   ```zsh
   ./scripts/prune.sh "{query}"
   ```
+
 - Supports optional arguments:
   - *(empty)*: Prunes recordings older than `RETENTION_DAYS`.
   - `force` / `all` / `purge`: Purges all recordings and metadata sidecars immediately.
   - `recordings`: Deletes audio files only, preserving JSON sidecars.
   - `archive`: Moves recordings to `$DATA_DIR/archive/`.
   - `<N>`: Deletes recordings older than $N$ days.
-

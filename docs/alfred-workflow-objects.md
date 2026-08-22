@@ -52,10 +52,10 @@
 
 - **Language:** `/bin/zsh`
 - **Environment Variables Passed:**
- - `TRANSCRIPTION_PROVIDER` (`mistral`, `groq`, `parakeet`)
- - `MISTRAL_API_KEY`
- - `GROQ_API_KEY`
- - `PARAKEET_ENDPOINT` (default: `http://localhost:8080/v1/audio/transcriptions`)
+- `TRANSCRIPTION_PROVIDER` (`mistral`, `groq`, `parakeet`)
+- `MISTRAL_API_KEY`
+- `GROQ_API_KEY`
+- `PARAKEET_ENDPOINT` (default: `http://localhost:8080/v1/audio/transcriptions`)
 
 ### 5. Conditional: LLM Cleanup Switch
 
@@ -66,8 +66,8 @@
 - **Language:** `/bin/zsh`
 - **Input:** Transcribed text via stdin / `{query}`.
 - **Environment Variables Passed:**
- - `MISTRAL_API_KEY`
- - `POLISH_MODEL` (default: `mistral-small-latest`)
+- `MISTRAL_API_KEY`
+- `POLISH_MODEL` (default: `mistral-small-latest`)
 
 ### 7. Copy to Clipboard
 
@@ -101,4 +101,3 @@
 | `PARAKEET_ENDPOINT` | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint for local Parakeet model |
 | `ENABLE_CLEANUP` | `false` | Enable LLM text polish (`true`/`false`) |
 | `RETENTION_DAYS` | `7` | Retention period in days for audio files |
-

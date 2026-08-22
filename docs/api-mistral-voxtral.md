@@ -7,7 +7,7 @@
 - **Content-Type:** `multipart/form-data`
 - **Model:** `voxtral-mini-latest`
 
-### cURL Request Example
+### 1: cURL Request Example
 
 ```bash
 curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
@@ -33,7 +33,7 @@ curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
 - **Content-Type:** `application/json`
 - **Model:** `mistral-small-latest`
 
-### cURL Request Example
+### 2: cURL Request Example
 
 ```bash
 curl -s https://api.mistral.ai/v1/chat/completions \

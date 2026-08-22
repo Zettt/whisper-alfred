@@ -18,9 +18,9 @@ Configure the Hotkey to toggle dictation on and off. Press once to start recordi
 
 Alternatively, manage workflow recordings via keywords:
 
-* `whisper`: Trigger dictation recording manually via keyword.
-* `whisper open`: Open the workflow’s recordings directory in Finder.
-* `whisper prune`: Delete local recordings and sidecars (supports optional arguments: `recordings` to delete only audio files, `archive` to archive files, `auto` for retention check, or a number `N` to delete files older than N days).
+- `whisper`: Trigger dictation recording manually via keyword.
+- `whisper open`: Open the workflow’s recordings directory in Finder.
+- `whisper prune`: Delete local recordings and sidecars (supports optional arguments: `recordings` to delete only audio files, `archive` to archive files, `auto` for retention check, or a number `N` to delete files older than N days).
 
 ### Features
 

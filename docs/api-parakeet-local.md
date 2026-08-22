@@ -9,7 +9,7 @@ You can choose between **Path A (Whisper.cpp)** or **Path B (Python Local Server
 ## Model & Engine Decision Matrix
 
 | Engine Path | Primary Benefit | Installation Complexity | Server Binary |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Path A: Whisper.cpp** | **Highest Accuracy & Formatting** (Best German/English mixed speech, punctuation) | **Easy** (Available via Homebrew) | `whisper-server` |
 | **Path B1: Faster-Whisper** | **Python Whisper Engine** (Fast CTranslate2 backend for Whisper models) | **Intermediate** (Python `venv` setup) | `faster-whisper-server` |
 | **Path B2: NVIDIA Parakeet** | **Highest Speed** (2x–4x faster inference, ultra-low RAM) | **Advanced** (Python `venv` + ONNX setup) | `sherpa-onnx` |
@@ -19,6 +19,7 @@ You can choose between **Path A (Whisper.cpp)** or **Path B (Python Local Server
 ## Path A: Setting Up Whisper Models (`whisper.cpp`)
 
 ### 1. Installation via Homebrew
+
 ```bash
 brew install whisper-cpp
 ```
@@ -34,6 +35,7 @@ curl -L -o ~/.models/ggml-base.bin https://huggingface.co/ggerganov/whisper.cpp/
 ```
 
 ### 3. Launch Server
+
 ```bash
 whisper-server -m ~/.models/ggml-base.bin --port 8080
 ```
@@ -46,6 +48,7 @@ whisper-server -m ~/.models/ggml-base.bin --port 8080
 > We use a Python virtual environment (`venv`) to keep all dependencies isolated in a single folder, ensuring they never interfere with system software.
 
 ### 1. Create Folder & Isolated Virtual Environment
+
 ```bash
 mkdir -p ~/.local-transcribe-server
 cd ~/.local-transcribe-server
@@ -54,6 +57,7 @@ source venv/bin/activate
 ```
 
 ### 2. Option B1: Install & Run `faster-whisper-server` (Whisper Models)
+
 `faster-whisper-server` runs OpenAI Whisper models using CTranslate2 for high performance.
 
 ```bash
@@ -68,8 +72,8 @@ faster-whisper-server --host 127.0.0.1 --port 8080 --model base
 
 ### 3. Option B2: Install & Run `sherpa-onnx` (NVIDIA Parakeet Models)
 
-* **NVIDIA Models (`.nemo`):** Raw original weights trained by NVIDIA (requires PyTorch / CUDA).
-* **Sherpa-ONNX Models (`.onnx`):** Converted ONNX version of the same NVIDIA weights, optimized for macOS Apple Silicon.
+- **NVIDIA Models (`.nemo`):** Raw original weights trained by NVIDIA (requires PyTorch / CUDA).
+- **Sherpa-ONNX Models (`.onnx`):** Converted ONNX version of the same NVIDIA weights, optimized for macOS Apple Silicon.
 
 ```bash
 pip install --upgrade pip
