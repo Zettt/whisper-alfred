@@ -2,11 +2,11 @@
 
 # Audio & Metadata Sidecar Retention Pruner for Alfred Workflow
 # Supports arguments ($1):
-#   (empty) / prune -> Purges ALL recordings & sidecars immediately
-#   recordings / wav -> Deletes only .wav audio files, keeping JSON sidecars
-#   archive          -> Moves recordings & sidecars to $DATA_DIR/archive/
-#   auto / retention -> Background retention check (deletes files older than RETENTION_DAYS)
-#   N (number)       -> Prunes files older than N days
+#   (empty) / auto / text -> Retention check (deletes files older than RETENTION_DAYS, default: 7)
+#   force / all / purge / 0 -> Purges ALL recordings & sidecars immediately
+#   recordings / wav / m4a  -> Deletes only audio files, keeping JSON sidecars
+#   archive                 -> Moves recordings & sidecars to $DATA_DIR/archive/
+#   N (number)              -> Prunes files older than N days
 
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
@@ -23,6 +23,10 @@ ARG="${RAW_ARG#prune}"
 ARG=$(echo "$ARG" | xargs)
 
 case "$ARG" in
+	"force" | "all" | "purge" | "0")
+		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -delete 2>/dev/null || true
+		printf "Purged all audio recordings and JSON sidecars."
+		;;
 	"recordings" | "wav" | "m4a" | "audio")
 		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" \) -delete 2>/dev/null || true
 		printf "Deleted all audio files. JSON sidecars preserved."
@@ -32,18 +36,13 @@ case "$ARG" in
 		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -exec mv {} "$ARCHIVE_DIR/" \; 2>/dev/null || true
 		printf "Archived all recordings to %s" "$ARCHIVE_DIR"
 		;;
-	"auto" | "retention")
-		DAYS="${RETENTION_DAYS:-7}"
-		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -mtime +${DAYS} -delete 2>/dev/null || true
-		printf "Pruned recordings older than %s days." "$DAYS"
-		;;
 	*)
 		if [[ "$ARG" =~ ^[0-9]+$ ]]; then
-			find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -mtime +${ARG} -delete 2>/dev/null || true
-			printf "Pruned recordings older than %s days." "$ARG"
+			DAYS="$ARG"
 		else
-			find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -delete 2>/dev/null || true
-			printf "Purged all audio recordings and JSON sidecars."
+			DAYS="${RETENTION_DAYS:-7}"
 		fi
+		find "$RECORDINGS_DIR" -type f \( -name "*.m4a" -o -name "*.wav" -o -name "*.mp4" -o -name "*.aac" -o -name "*.json" \) -mtime +${DAYS} -delete 2>/dev/null || true
+		printf "Pruned recordings older than %s days." "$DAYS"
 		;;
 esac

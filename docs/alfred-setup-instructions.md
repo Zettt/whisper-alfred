@@ -111,8 +111,9 @@ Click the **Configure Workflow** button (top right of workflow window) and add:
   ./scripts/prune.sh "{query}"
   ```
 - Supports optional arguments:
-  - *(empty)* or `prune`: Purges all recordings and metadata sidecars immediately.
-  - `recordings`: Deletes `.wav` audio files only, preserving JSON sidecars.
+  - *(empty)*: Prunes recordings older than `RETENTION_DAYS`.
+  - `force` / `all` / `purge`: Purges all recordings and metadata sidecars immediately.
+  - `recordings`: Deletes audio files only, preserving JSON sidecars.
   - `archive`: Moves recordings to `$DATA_DIR/archive/`.
   - `<N>`: Deletes recordings older than $N$ days.
 

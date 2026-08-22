@@ -51,21 +51,41 @@ else
     echo "[PASS] Toggle controller cleanly terminated process state"
 fi
 
-# Test 3: Audio Pruner Test - Default Full Purge (whisper prune with no arg)
+# Test 3: Audio Pruner Test - Default Retention Prune (empty arg & upstream transcript string)
+RECENT_M4A="$alfred_workflow_data/recordings/recent_sample.m4a"
+RECENT_JSON="$alfred_workflow_data/recordings/recent_sample.json"
+OLD_M4A="$alfred_workflow_data/recordings/old_sample.m4a"
+OLD_JSON="$alfred_workflow_data/recordings/old_sample.json"
+
+touch "$RECENT_M4A" "$RECENT_JSON"
+touch -t 202001010000 "$OLD_M4A" "$OLD_JSON"
+
+# Simulating workflow completion where upstream transcribed text is piped as $1
+RETENTION_DAYS=7 ./scripts/prune.sh "This is a transcribed voice note from workflow" > /dev/null
+
+if [[ -f "$RECENT_M4A" && -f "$RECENT_JSON" && ! -f "$OLD_M4A" && ! -f "$OLD_JSON" ]]; then
+    echo "[PASS] Pruner default/upstream argument executed retention pruning without deleting recent recordings"
+else
+    echo "[FAIL] Pruner default retention behavior failed"
+    exit 1
+fi
+rm -f "$RECENT_M4A" "$RECENT_JSON"
+
+# Test 4: Audio Pruner Test - Explicit Full Purge ('force' / 'all' / 'purge')
 SAMPLE_M4A="$alfred_workflow_data/recordings/sample.m4a"
 SAMPLE_JSON="$alfred_workflow_data/recordings/sample.json"
 touch "$SAMPLE_M4A" "$SAMPLE_JSON"
 
-./scripts/prune.sh "" > /dev/null
+./scripts/prune.sh "force" > /dev/null
 
 if [[ ! -f "$SAMPLE_M4A" && ! -f "$SAMPLE_JSON" ]]; then
-    echo "[PASS] Pruner script default (empty arg) purged all recordings"
+    echo "[PASS] Pruner 'force' argument purged all recordings"
 else
-    echo "[FAIL] Pruner default full purge failed"
+    echo "[FAIL] Pruner 'force' full purge failed"
     exit 1
 fi
 
-# Test 4: Audio Pruner Test - 'recordings' / 'wav' / 'm4a' sub-argument
+# Test 5: Audio Pruner Test - 'recordings' / 'wav' / 'm4a' sub-argument
 touch "$SAMPLE_M4A" "$SAMPLE_JSON"
 
 ./scripts/prune.sh "recordings" > /dev/null
@@ -78,7 +98,7 @@ else
 fi
 rm -f "$SAMPLE_JSON"
 
-# Test 5: Audio Pruner Test - 'archive' sub-argument
+# Test 6: Audio Pruner Test - 'archive' sub-argument
 touch "$SAMPLE_M4A" "$SAMPLE_JSON"
 
 ./scripts/prune.sh "archive" > /dev/null
@@ -91,20 +111,20 @@ else
 fi
 rm -rf "$alfred_workflow_data/archive"
 
-# Test 6: Audio Pruner Test - 'auto' retention check
-OLD_M4A="$alfred_workflow_data/recordings/old_sample.m4a"
-NEW_M4A="$alfred_workflow_data/recordings/new_sample.m4a"
-touch -t 202001010000 "$OLD_M4A"
-touch "$NEW_M4A"
+# Test 7: Audio Pruner Test - Numeric days argument
+EXPIRED_M4A="$alfred_workflow_data/recordings/expired_sample.m4a"
+FRESH_M4A="$alfred_workflow_data/recordings/fresh_sample.m4a"
+touch -t 202001010000 "$EXPIRED_M4A"
+touch "$FRESH_M4A"
 
-RETENTION_DAYS=1 ./scripts/prune.sh "auto" > /dev/null
+./scripts/prune.sh "2" > /dev/null
 
-if [[ ! -f "$OLD_M4A" && -f "$NEW_M4A" ]]; then
-    echo "[PASS] Pruner 'auto' mode deleted expired recording and preserved new recording"
+if [[ ! -f "$EXPIRED_M4A" && -f "$FRESH_M4A" ]]; then
+    echo "[PASS] Pruner numeric argument pruned files older than specified days"
 else
-    echo "[FAIL] Pruner 'auto' retention mode failed"
+    echo "[FAIL] Pruner numeric days mode failed"
     exit 1
 fi
-rm -f "$NEW_M4A"
+rm -f "$FRESH_M4A"
 
 echo "=== All Tests Passed Successfully ==="

@@ -85,8 +85,9 @@
 
 - **`whisper open`**: Executes `./scripts/open_recordings.sh` to open recordings directory in Finder.
 - **`whisper prune`**: Executes `./scripts/prune.sh "{query}"`.
-  - Empty / `prune`: Full purge of all `.wav` and `.json` recordings.
-  - `recordings`: Deletes `.wav` audio files only.
+  - Empty: Prunes recordings older than `RETENTION_DAYS`.
+  - `force` / `all` / `purge`: Full purge of all recordings and metadata sidecars immediately.
+  - `recordings`: Deletes audio files only (`.m4a`, `.wav`, `.mp4`, `.aac`).
   - `archive`: Moves recordings to `archive/` directory.
   - `<N>`: Deletes recordings older than $N$ days.
 
