@@ -34,12 +34,12 @@ parse_json_transcription() {
 	local err text
 
 	if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
-		err=$(printf "%s" "$resp" | jq -r '.error // empty' 2>/dev/null)
+		err=$(printf "%s" "$resp" | jq -r 'if .error | type == "object" then .error.message // (.error | tostring) elif .error then (.error | tostring) else empty end' 2>/dev/null)
 		if [[ -n "$err" ]]; then
 			if [[ "$err" == "LOCAL_SERVER_OFFLINE" ]]; then
 				printf "%s" "[Whisper Alfred Error: Could not connect to local server on ${endpoint}. Please verify your local server is running.]"
 			else
-				printf "%s" "[Whisper Alfred Error: API error]"
+				printf "%s" "[Whisper Alfred Error: API error - ${err}]"
 			fi
 			return
 		fi
@@ -49,12 +49,15 @@ parse_json_transcription() {
 	fi
 
 	# Fallback to macOS plutil
-	err=$(plutil -extract error raw -o - - <<< "$resp" 2>/dev/null || true)
-	if [[ -n "$err" && "$err" != "(null)" ]]; then
+	err=$(plutil -extract error.message raw -o - - <<< "$resp" 2>/dev/null || plutil -extract error raw -o - - <<< "$resp" 2>/dev/null || true)
+	if [[ "$err" == "(null)" ]]; then
+		err=""
+	fi
+	if [[ -n "$err" ]]; then
 		if [[ "$err" == "LOCAL_SERVER_OFFLINE" ]]; then
 			printf "%s" "[Whisper Alfred Error: Could not connect to local server on ${endpoint}. Please verify your local server is running.]"
 		else
-			printf "%s" "[Whisper Alfred Error: API error]"
+			printf "%s" "[Whisper Alfred Error: API error - ${err}]"
 		fi
 		return
 	fi
@@ -87,6 +90,9 @@ mistral)
 	fi
 
 	MODEL="${TRANSCRIPTION_MODEL:-voxtral-mini-latest}"
+	if [[ "$MODEL" == "whisper-large-v3-turbo" || "$MODEL" == "whisper-large-v3" || "$MODEL" == "local" ]]; then
+		MODEL="voxtral-mini-latest"
+	fi
 
 	RESPONSE=$(curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
 		--header "Authorization: Bearer $MISTRAL_API_KEY" \
@@ -103,6 +109,9 @@ groq)
 	fi
 
 	MODEL="${TRANSCRIPTION_MODEL:-whisper-large-v3-turbo}"
+	if [[ "$MODEL" == "voxtral-mini-latest" || "$MODEL" == "local" ]]; then
+		MODEL="whisper-large-v3-turbo"
+	fi
 
 	RESPONSE=$(curl -s https://api.groq.com/openai/v1/audio/transcriptions \
 		-H "Authorization: Bearer $GROQ_API_KEY" \
@@ -116,6 +125,9 @@ groq)
 local | parakeet)
 	ENDPOINT="${LOCAL_TRANSCRIPTION_ENDPOINT:-${LOCAL_ENDPOINT:-${PARAKEET_ENDPOINT:-http://127.0.0.1:8080/v1/audio/transcriptions}}}"
 	MODEL="${TRANSCRIPTION_MODEL:-local}"
+	if [[ "$MODEL" == "voxtral-mini-latest" || "$MODEL" == "whisper-large-v3-turbo" || "$MODEL" == "whisper-large-v3" ]]; then
+		MODEL="local"
+	fi
 
 	# Connect with 2-second timeout to handle unstarted local server gracefully
 	RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \

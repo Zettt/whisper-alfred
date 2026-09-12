@@ -174,4 +174,45 @@ else
     exit 1
 fi
 
+# Test 11: Cross-provider transcription model mismatch fallback
+MOCK_TRANS_AUDIO="$alfred_workflow_data/recordings/test_model_fallback.m4a"
+touch "$MOCK_TRANS_AUDIO"
+# Testing that Groq with voxtral-mini-latest doesn't crash before validation (requires GROQ_API_KEY)
+# If GROQ_API_KEY is empty, it exits 1 with expected message
+GROQ_KEY_ERR=$(TRANSCRIPTION_PROVIDER="groq" GROQ_API_KEY="" TRANSCRIPTION_MODEL="voxtral-mini-latest" ./scripts/transcribe.sh "$MOCK_TRANS_AUDIO" 2>&1 || true)
+if [[ "$GROQ_KEY_ERR" =~ "GROQ_API_KEY environment variable is not set" ]]; then
+    echo "[PASS] Groq provider validates API key presence"
+else
+    echo "[FAIL] Groq provider API key check failed: '$GROQ_KEY_ERR'"
+    exit 1
+fi
+rm -f "$MOCK_TRANS_AUDIO"
+
+# Test 12: Detailed API error parsing in transcribe script
+MOCK_ERR_RESP='{"error":{"message":"The model does not exist","type":"invalid_request_error","code":"model_not_found"}}'
+PARSE_OUT=$(zsh -c '
+    eval "$(sed -n "/parse_json_transcription() {/,/^}/p" ./scripts/transcribe.sh)"
+    eval "$(sed -n "/trim() {/,/^}/p" ./scripts/transcribe.sh)"
+    parse_json_transcription '"'$MOCK_ERR_RESP'"'
+')
+if [[ "$PARSE_OUT" =~ "The model does not exist" ]]; then
+    echo "[PASS] parse_json_transcription correctly extracts detailed error message"
+else
+    echo "[FAIL] Detailed error extraction failed: '$PARSE_OUT'"
+    exit 1
+fi
+
+# Test 13: plutil fallback for detailed API error parsing
+PARSE_OUT_PLUTIL=$(FORCE_PLUTIL=1 zsh -c '
+    eval "$(sed -n "/parse_json_transcription() {/,/^}/p" ./scripts/transcribe.sh)"
+    eval "$(sed -n "/trim() {/,/^}/p" ./scripts/transcribe.sh)"
+    parse_json_transcription '"'$MOCK_ERR_RESP'"'
+')
+if [[ "$PARSE_OUT_PLUTIL" =~ "The model does not exist" ]]; then
+    echo "[PASS] parse_json_transcription (plutil fallback) correctly extracts detailed error message"
+else
+    echo "[FAIL] Detailed error extraction (plutil fallback) failed: '$PARSE_OUT_PLUTIL'"
+    exit 1
+fi
+
 echo "=== All Tests Passed Successfully ==="

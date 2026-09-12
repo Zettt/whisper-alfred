@@ -35,6 +35,9 @@ mistral)
 		exit 0
 	fi
 	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-mistral-small-latest}}"
+	if [[ "$MODEL" == "llama-3.1-8b-instant" || "$MODEL" == "llama3.2" ]]; then
+		MODEL="mistral-small-latest"
+	fi
 	ENDPOINT="https://api.mistral.ai/v1/chat/completions"
 	AUTH_HEADER="Authorization: Bearer $MISTRAL_API_KEY"
 	;;
@@ -45,12 +48,18 @@ groq)
 		exit 0
 	fi
 	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-llama-3.1-8b-instant}}"
+	if [[ "$MODEL" == "mistral-small-latest" || "$MODEL" == "llama3.2" ]]; then
+		MODEL="llama-3.1-8b-instant"
+	fi
 	ENDPOINT="https://api.groq.com/openai/v1/chat/completions"
 	AUTH_HEADER="Authorization: Bearer $GROQ_API_KEY"
 	;;
 
 local)
 	MODEL="${CLEANUP_MODEL:-${POLISH_MODEL:-llama3.2}}"
+	if [[ "$MODEL" == "mistral-small-latest" || "$MODEL" == "llama-3.1-8b-instant" ]]; then
+		MODEL="llama3.2"
+	fi
 	ENDPOINT="${LOCAL_CLEANUP_ENDPOINT:-${LOCAL_LLM_ENDPOINT:-http://127.0.0.1:11434/v1/chat/completions}}"
 	AUTH_HEADER="Authorization: Bearer local"
 	;;
