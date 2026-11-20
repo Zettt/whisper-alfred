@@ -9,15 +9,26 @@
   "window": {
     "title": "Whisper Alfred Status",
     "borderless": true,
+    "closeable": false,
+    "miniaturisable": false,
+    "resizeable": false,
     "blur": true,
-    "cornerradius": 16,
+    "cornerradius": 18,
     "level": 3,
     "movablebybackground": true,
     "frameautosave": true,
     "padding": 12,
     "size": {
-      "width": 360,
-      "height": 60
+      "width": 380,
+      "height": 96
+    },
+    "minsize": {
+      "width": 380,
+      "height": 64
+    },
+    "maxsize": {
+      "width": 380,
+      "height": 64
     },
     "root": {
       "type": "view",
@@ -27,7 +38,11 @@
         {
           "constraints": {
             "region": "left",
-            "position": "centre"
+            "position": "centre",
+            "size": {
+              "width": 24,
+              "height": 24
+            }
           },
           "id": "statusIcon",
           "type": "imageview",
@@ -43,7 +58,9 @@
         },
         {
           "constraints": {
-            "region": "centre"
+            "region": "centre",
+            "position": "centre",
+            "stretch": "horizontal"
           },
           "type": "view",
           "layout": "inline",
@@ -55,6 +72,7 @@
               "type": "label",
               "text": "Recording...",
               "font": {
+                "size": "default",
                 "weight": "semibold"
               }
             },
@@ -84,7 +102,7 @@
               "id": "stopBtn",
               "type": "button",
               "text": "Stop",
-              "shortcut": "↩︎",
+              "shortcut": "↩",
               "events": [
                 {
                   "triggers": "actioned",

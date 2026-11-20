@@ -472,11 +472,15 @@ printf '[]\n' > "$HIST_DATA_FILE"
 # Test 23: Floating HUD UI & pulse/action scripts (1B)
 if [[ -f "./workflow/hud.alfredui/ui.json" ]] && jq -e '
     (.window.borderless == true) and
+    (.window.resizeable == false) and
+    (.window.size.height == 96) and
+    (.window.minsize.height == 64) and
+    (.window.maxsize.height == 64) and
     (.pulse.src == "./scripts/hud_pulse.sh") and
     (.. | objects | select(.id? == "statusLabel")) and
     (.. | objects | select(.id? == "timerLabel")) and
-    (.. | objects | select(.id? == "stopBtn")) and
-    (.. | objects | select(.id? == "cancelBtn"))
+    (.. | objects | select(.id? == "stopBtn" and .shortcut? == "↩")) and
+    (.. | objects | select(.id? == "cancelBtn" and .shortcut? == "⎋"))
 ' ./workflow/hud.alfredui/ui.json >/dev/null 2>&1; then
     echo "[PASS] hud.alfredui/ui.json passes layout and pulse configuration checks"
 else

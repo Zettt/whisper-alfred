@@ -29,7 +29,7 @@ Available keywords:
 ### Features
 
 - ⚡ **Hotkey Toggle:** Press once to start recording, press again to transcribe and paste into your frontmost app.
-- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (<kbd>↩︎</kbd>), and Cancel (<kbd>⎋</kbd>) buttons.
+- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (<kbd>↩︎</kbd>), and Cancel (<kbd>⎋</kbd>) buttons. Drag the HUD to any screen position (such as top-center under the notch); Alfred saves that position for subsequent recordings.
 - 📜 **Transcript History Browser:** Searchable Alfred UI browser (`history.alfredui`) with side-by-side polished and raw transcripts, audio playback, clipboard copy, and entry deletion.
 - 🌐 **Multi-Provider Support:** Switch between Mistral AI, Groq Cloud, and offline Local AI for both transcription and cleanup.
 - ✨ **LLM Text Cleanup:** Fixes grammar, removes filler words (*um, uh*), and cleans punctuation before pasting.

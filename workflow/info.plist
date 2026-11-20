@@ -763,7 +763,7 @@ Available keywords:
 ### Features
 
 - ⚡ **Hotkey Toggle:** Press once to start recording, press again to transcribe and paste into your frontmost app.
-- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (&lt;kbd&gt;↩︎&lt;/kbd&gt;), and Cancel (&lt;kbd&gt;⎋&lt;/kbd&gt;) buttons.
+- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (&lt;kbd&gt;↩︎&lt;/kbd&gt;), and Cancel (&lt;kbd&gt;⎋&lt;/kbd&gt;) buttons. Drag the HUD to any screen position (such as top-center under the notch); Alfred saves that position for subsequent recordings.
 - 📜 **Transcript History Browser:** Searchable Alfred UI browser (`history.alfredui`) with side-by-side polished and raw transcripts, audio playback, clipboard copy, and entry deletion.
 - 🌐 **Multi-Provider Support:** Switch between Mistral AI, Groq Cloud, and offline Local AI for both transcription and cleanup.
 - ✨ **LLM Text Cleanup:** Fixes grammar, removes filler words (*um, uh*), and cleans punctuation before pasting.
@@ -851,82 +851,82 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 		<key>063BAF88-77A7-461D-ACCB-3FD40C2D4017</key>
 		<dict>
 			<key>xpos</key>
-			<real>370</real>
+			<real>415</real>
 			<key>ypos</key>
-			<real>170</real>
+			<real>200</real>
 		</dict>
 		<key>1654C82B-4787-48AD-BFD4-2BE9BEC4F4BF</key>
 		<dict>
 			<key>note</key>
 			<string>Transcription Dispatcher</string>
 			<key>xpos</key>
-			<real>455</real>
+			<real>505</real>
 			<key>ypos</key>
-			<real>140</real>
+			<real>170</real>
 		</dict>
 		<key>1818A83B-5F44-4E96-88C2-D3284F397B26</key>
 		<dict>
 			<key>note</key>
 			<string>Recording Toggle</string>
 			<key>xpos</key>
-			<real>210</real>
+			<real>240</real>
 			<key>ypos</key>
-			<real>140</real>
+			<real>170</real>
 		</dict>
 		<key>33222A3F-6B70-46C3-BD28-F4FC00C04738</key>
 		<dict>
 			<key>note</key>
 			<string>Paste output. Also copy to clipboard (if direct pasting fails it's still on the clipboard history).</string>
 			<key>xpos</key>
-			<real>960</real>
+			<real>1040</real>
 			<key>ypos</key>
-			<real>170</real>
+			<real>190</real>
 		</dict>
 		<key>43187ABD-0700-45AF-9130-BBB93018E7A5</key>
 		<dict>
 			<key>xpos</key>
-			<real>210</real>
+			<real>240</real>
 			<key>ypos</key>
-			<real>520</real>
+			<real>690</real>
 		</dict>
 		<key>4C13CCCB-75F5-486B-81DF-F47757BECF07</key>
 		<dict>
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>330</real>
+			<real>510</real>
 		</dict>
 		<key>4F86C9D3-C65E-4D10-8B9C-74D744E3C9AC</key>
 		<dict>
 			<key>note</key>
 			<string>Audio Pruner: periodic cleanup of old transcriptions.</string>
 			<key>xpos</key>
-			<real>960</real>
+			<real>1040</real>
 			<key>ypos</key>
-			<real>330</real>
+			<real>410</real>
 		</dict>
 		<key>7F06D968-A68C-481E-83C0-7B45F509D2D1</key>
 		<dict>
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>90</real>
+			<real>170</real>
 		</dict>
 		<key>96044FCE-DD2A-4377-A620-9F0FCC3E7BFE</key>
 		<dict>
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>200</real>
+			<real>310</real>
 		</dict>
 		<key>BBB0DAF9-A820-4E00-A4A8-35C1911D91ED</key>
 		<dict>
 			<key>note</key>
 			<string>LLM Polish Dispatcher</string>
 			<key>xpos</key>
-			<real>620</real>
+			<real>695</real>
 			<key>ypos</key>
-			<real>140</real>
+			<real>170</real>
 		</dict>
 		<key>CEFFE7D5-E06E-4FC6-800F-6B38062BCBC7</key>
 		<dict>
@@ -935,30 +935,30 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>520</real>
+			<real>690</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000001</key>
 		<dict>
 			<key>xpos</key>
-			<real>780</real>
+			<real>870</real>
 			<key>ypos</key>
-			<real>160</real>
+			<real>190</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000003</key>
 		<dict>
 			<key>note</key>
 			<string>Display transcription error notification.</string>
 			<key>xpos</key>
-			<real>960</real>
+			<real>1040</real>
 			<key>ypos</key>
-			<real>40</real>
+			<real>20</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000004</key>
 		<dict>
 			<key>xpos</key>
-			<real>875</real>
+			<real>955</real>
 			<key>ypos</key>
-			<real>290</real>
+			<real>385</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000005</key>
 		<dict>
@@ -967,16 +967,16 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>650</real>
+			<real>860</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000006</key>
 		<dict>
 			<key>note</key>
 			<string>Cancel active recording.</string>
 			<key>xpos</key>
-			<real>210</real>
+			<real>240</real>
 			<key>ypos</key>
-			<real>650</real>
+			<real>860</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000007</key>
 		<dict>
@@ -985,30 +985,30 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>780</real>
+			<real>1030</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000008</key>
 		<dict>
 			<key>xpos</key>
-			<real>210</real>
+			<real>240</real>
 			<key>ypos</key>
-			<real>780</real>
+			<real>1030</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000009</key>
 		<dict>
 			<key>xpos</key>
-			<real>380</real>
+			<real>435</real>
 			<key>ypos</key>
-			<real>780</real>
+			<real>1030</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000010</key>
 		<dict>
 			<key>note</key>
 			<string>Floating recording status HUD.</string>
 			<key>xpos</key>
-			<real>455</real>
+			<real>505</real>
 			<key>ypos</key>
-			<real>270</real>
+			<real>340</real>
 		</dict>
 		<key>E1A2B3C4-1111-4000-8000-000000000011</key>
 		<dict>
@@ -1017,7 +1017,7 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 			<key>xpos</key>
 			<real>45</real>
 			<key>ypos</key>
-			<real>10</real>
+			<real>20</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
