@@ -14,8 +14,10 @@ if [[ -z "$AUDIO_FILE" || ! -f "$AUDIO_FILE" ]]; then
 fi
 
 PROVIDER="${TRANSCRIPTION_PROVIDER:-mistral}"
-CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/transcribe}"
+CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/com.zettt.whisper-alfred}"
+STATUS_FILE="$CACHE_DIR/status.txt"
 mkdir -p "$CACHE_DIR"
+echo "transcribing" > "$STATUS_FILE"
 
 TEXT=""
 MODEL=""
@@ -34,7 +36,7 @@ parse_json_transcription() {
 	local err text
 
 	if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
-		err=$(printf "%s" "$resp" | jq -r 'if .error | type == "object" then .error.message // (.error | tostring) elif .error then (.error | tostring) else empty end' 2>/dev/null)
+		err=$(printf "%s" "$resp" | jq -r 'if .error | type == "object" then .error.message // (.error | tostring) elif .error then (.error | tostring) else empty end' 2>/dev/null || true)
 		if [[ -n "$err" ]]; then
 			if [[ "$err" == "LOCAL_SERVER_OFFLINE" ]]; then
 				printf "%s" "[Whisper Alfred Error: Could not connect to local server on ${endpoint}. Please verify your local server is running.]"
@@ -43,7 +45,7 @@ parse_json_transcription() {
 			fi
 			return
 		fi
-		text=$(printf "%s" "$resp" | jq -r '.text // empty' 2>/dev/null)
+		text=$(printf "%s" "$resp" | jq -r '.text // empty' 2>/dev/null || true)
 		trim "$text"
 		return
 	fi
@@ -85,7 +87,10 @@ escape_json_val() {
 case "$PROVIDER" in
 mistral)
 	if [[ -z "$MISTRAL_API_KEY" ]]; then
-		echo "Error: MISTRAL_API_KEY environment variable is not set." >&2
+		ERR_MSG="[Whisper Alfred Error: MISTRAL_API_KEY environment variable is not set.]"
+		rm -f "$STATUS_FILE"
+		printf "%s" "$ERR_MSG"
+		echo "$ERR_MSG" >&2
 		exit 1
 	fi
 
@@ -97,14 +102,17 @@ mistral)
 	RESPONSE=$(curl -s --location 'https://api.mistral.ai/v1/audio/transcriptions' \
 		--header "Authorization: Bearer $MISTRAL_API_KEY" \
 		--form "file=@$AUDIO_FILE" \
-		--form "model=\"$MODEL\"")
+		--form "model=\"$MODEL\"" 2>/dev/null || echo '{"error":"Could not reach Mistral API"}')
 
 	TEXT=$(parse_json_transcription "$RESPONSE")
 	;;
 
 groq)
 	if [[ -z "$GROQ_API_KEY" ]]; then
-		echo "Error: GROQ_API_KEY environment variable is not set." >&2
+		ERR_MSG="[Whisper Alfred Error: GROQ_API_KEY environment variable is not set.]"
+		rm -f "$STATUS_FILE"
+		printf "%s" "$ERR_MSG"
+		echo "$ERR_MSG" >&2
 		exit 1
 	fi
 
@@ -117,7 +125,7 @@ groq)
 		-H "Authorization: Bearer $GROQ_API_KEY" \
 		-F "file=@$AUDIO_FILE" \
 		-F "model=$MODEL" \
-		-F "response_format=json")
+		-F "response_format=json" 2>/dev/null || echo '{"error":"Could not reach Groq API"}')
 
 	TEXT=$(parse_json_transcription "$RESPONSE")
 	;;
@@ -130,7 +138,7 @@ local | parakeet)
 	fi
 
 	# Connect with 2-second timeout to handle unstarted local server gracefully
-	RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \
+	RESPONSE=$(curl -s --noproxy '*' --connect-timeout 2 "$ENDPOINT" \
 		-F "file=@$AUDIO_FILE" \
 		-F "model=$MODEL" 2>/dev/null || echo '{"error":"LOCAL_SERVER_OFFLINE"}')
 
@@ -138,29 +146,26 @@ local | parakeet)
 	;;
 
 *)
-	echo "Error: Unknown provider '$PROVIDER'" >&2
+	ERR_MSG="[Whisper Alfred Error: Unknown provider '$PROVIDER']"
+	rm -f "$STATUS_FILE"
+	printf "%s" "$ERR_MSG"
+	echo "$ERR_MSG" >&2
 	exit 1
 	;;
 esac
 
 # Sidecar metadata file path alongside audio file
 JSON_FILE="${AUDIO_FILE%.*}.json"
+JSON_TMP="${JSON_FILE}.tmp"
 TIMESTAMP_ISO=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# Store active JSON sidecar pointer in cache for polish script
-echo "$JSON_FILE" > "$CACHE_DIR/latest_sidecar.txt"
+# Synchronously write matching JSON sidecar file atomically before polish.sh runs
+JSON_AUDIO=$(escape_json_val "$AUDIO_FILE")
+JSON_PROV=$(escape_json_val "$PROVIDER")
+JSON_MODEL=$(escape_json_val "$MODEL")
+JSON_TEXT=$(escape_json_val "$TEXT")
 
-# Output transcription immediately to stdout for Alfred
-printf "%s" "$TEXT"
-
-# Asynchronously write matching JSON sidecar file in background
-(
-	JSON_AUDIO=$(escape_json_val "$AUDIO_FILE")
-	JSON_PROV=$(escape_json_val "$PROVIDER")
-	JSON_MODEL=$(escape_json_val "$MODEL")
-	JSON_TEXT=$(escape_json_val "$TEXT")
-
-	cat <<EOF > "$JSON_FILE"
+cat <<EOF > "$JSON_TMP"
 {
   "timestamp": "$TIMESTAMP_ISO",
   "audio_file": $JSON_AUDIO,
@@ -177,4 +182,16 @@ printf "%s" "$TEXT"
   }
 }
 EOF
-) >/dev/null 2>&1 &!
+mv "$JSON_TMP" "$JSON_FILE"
+
+# Store active JSON sidecar pointer in cache for polish script
+echo "$JSON_FILE" > "$CACHE_DIR/latest_sidecar.txt"
+
+if [[ "$TEXT" == \[Whisper\ Alfred\ Error:* ]] || [[ "${ENABLE_CLEANUP:-false}" != "1" && "${ENABLE_CLEANUP:-false}" != "true" ]]; then
+	rm -f "$STATUS_FILE"
+else
+	echo "polishing" > "$STATUS_FILE"
+fi
+
+# Output transcription to stdout for Alfred
+printf "%s" "$TEXT"

@@ -7,6 +7,10 @@ set -e
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
+CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/com.zettt.whisper-alfred}"
+LATEST_SIDECAR="$CACHE_DIR/latest_sidecar.txt"
+trap 'rm -f "$CACHE_DIR/status.txt"' EXIT
+
 TEXT_INPUT="$1"
 
 if [[ -z "$TEXT_INPUT" ]]; then
@@ -17,9 +21,12 @@ if [[ -z "$TEXT_INPUT" ]]; then
 	exit 0
 fi
 
+if [[ "$TEXT_INPUT" == \[Whisper\ Alfred\ Error:* ]]; then
+	printf "%s" "$TEXT_INPUT"
+	exit 0
+fi
+
 ENABLE="${ENABLE_CLEANUP:-false}"
-CACHE_DIR="${alfred_workflow_cache:-$HOME/Library/Caches/com.runningwithcrayons.Alfred/Workflow Data/transcribe}"
-LATEST_SIDECAR="$CACHE_DIR/latest_sidecar.txt"
 
 if [[ "$ENABLE" != "1" && "$ENABLE" != "true" ]]; then
 	printf "%s" "$TEXT_INPUT"
@@ -27,6 +34,7 @@ if [[ "$ENABLE" != "1" && "$ENABLE" != "true" ]]; then
 fi
 
 PROVIDER="${CLEANUP_PROVIDER:-${POLISH_PROVIDER:-mistral}}"
+CURL_EXTRA_ARGS=()
 
 case "$PROVIDER" in
 mistral)
@@ -62,6 +70,7 @@ local)
 	fi
 	ENDPOINT="${LOCAL_CLEANUP_ENDPOINT:-${LOCAL_LLM_ENDPOINT:-http://127.0.0.1:11434/v1/chat/completions}}"
 	AUTH_HEADER="Authorization: Bearer local"
+	CURL_EXTRA_ARGS=(--noproxy '*')
 	;;
 
 *)
@@ -108,7 +117,7 @@ parse_polish_response() {
 
 	if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
 		local content
-		content=$(printf "%s" "$resp" | jq -r '.choices[0].message.content // empty' 2>/dev/null)
+		content=$(printf "%s" "$resp" | jq -r '.choices[0].message.content // empty' 2>/dev/null || true)
 		trim "$content"
 		return
 	fi
@@ -141,7 +150,7 @@ else
 	PAYLOAD="{\"model\":$ESC_MODEL,\"messages\":[{\"role\":\"system\",\"content\":$ESC_PROMPT},{\"role\":\"user\",\"content\":$ESC_TEXT}],\"temperature\":0.2}"
 fi
 
-RESPONSE=$(curl -s --connect-timeout 2 "$ENDPOINT" \
+RESPONSE=$(curl -s "${CURL_EXTRA_ARGS[@]}" --connect-timeout 2 "$ENDPOINT" \
 	-H "$AUTH_HEADER" \
 	-H "Content-Type: application/json" \
 	-d "$PAYLOAD" 2>/dev/null || echo '{"error":"LOCAL_LLM_OFFLINE"}')
@@ -153,31 +162,28 @@ if [[ -n "$POLISHED" ]]; then
 	FINAL_TEXT="$POLISHED"
 fi
 
-# Output final text immediately to stdout for Alfred
-printf "%s" "$FINAL_TEXT"
-
-# Update matching JSON sidecar file in background
+# Synchronously update matching JSON sidecar file atomically before exiting
 if [[ -f "$LATEST_SIDECAR" ]]; then
 	JSON_FILE=$(cat "$LATEST_SIDECAR" | tr -d '\r\n')
 	if [[ -f "$JSON_FILE" ]]; then
-		(
-			if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
-				UPDATED_JSON=$(jq \
-					--arg provider "$PROVIDER" \
-					--arg model "$MODEL" \
-					--arg polished "$FINAL_TEXT" \
-					'.cleanup = {
-						enabled: true,
-						provider: $provider,
-						model: $model,
-						polished_text: $polished
-					}' "$JSON_FILE" 2>/dev/null)
-				if [[ -n "$UPDATED_JSON" ]]; then
-					printf "%s\n" "$UPDATED_JSON" > "$JSON_FILE"
-				fi
-			elif command -v python3 >/dev/null 2>&1; then
-				python3 -c "
-import json, sys
+		JSON_TMP="${JSON_FILE}.tmp"
+		if command -v jq >/dev/null 2>&1 && [[ "${FORCE_PLUTIL:-0}" != "1" ]]; then
+			UPDATED_JSON=$(jq \
+				--arg provider "$PROVIDER" \
+				--arg model "$MODEL" \
+				--arg polished "$FINAL_TEXT" \
+				'.cleanup = {
+					enabled: true,
+					provider: $provider,
+					model: $model,
+					polished_text: $polished
+				}' "$JSON_FILE" 2>/dev/null || true)
+			if [[ -n "$UPDATED_JSON" ]]; then
+				printf "%s\n" "$UPDATED_JSON" > "$JSON_TMP" && mv "$JSON_TMP" "$JSON_FILE"
+			fi
+		elif command -v python3 >/dev/null 2>&1; then
+			python3 -c "
+import json, os, sys
 try:
     with open(sys.argv[1], 'r') as f:
         data = json.load(f)
@@ -187,12 +193,16 @@ try:
         'model': sys.argv[3],
         'polished_text': sys.argv[4]
     }
-    with open(sys.argv[1], 'w') as f:
+    tmp = sys.argv[1] + '.tmp'
+    with open(tmp, 'w') as f:
         json.dump(data, f, indent=2)
+    os.replace(tmp, sys.argv[1])
 except Exception:
     pass
 " "$JSON_FILE" "$PROVIDER" "$MODEL" "$FINAL_TEXT" 2>/dev/null || true
-			fi
-		) >/dev/null 2>&1 &!
+		fi
 	fi
 fi
+
+# Output final text to stdout for Alfred
+printf "%s" "$FINAL_TEXT"

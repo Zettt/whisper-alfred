@@ -7,7 +7,7 @@ set -e
 
 export PATH="/usr/bin:/bin:$PATH"
 
-DATA_DIR="${alfred_workflow_data:-$HOME/Library/Application Support/Alfred/Workflow Data/transcribe}"
+DATA_DIR="${alfred_workflow_data:-$HOME/Library/Application Support/Alfred/Workflow Data/com.zettt.whisper-alfred}"
 RECORDINGS_DIR="$DATA_DIR/recordings"
 
 mkdir -p "$RECORDINGS_DIR"

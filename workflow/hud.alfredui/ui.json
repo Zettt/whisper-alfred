@@ -1,0 +1,125 @@
+{
+  "bundleid": "com.zettt.whisper-alfred.hud",
+  "pulse": {
+    "src": "./scripts/hud_pulse.sh",
+    "interval": 0.25,
+    "intervalmode": "regular",
+    "now": true
+  },
+  "window": {
+    "title": "Whisper Alfred Status",
+    "borderless": true,
+    "blur": true,
+    "cornerradius": 16,
+    "level": 3,
+    "movablebybackground": true,
+    "frameautosave": true,
+    "padding": 12,
+    "size": {
+      "width": 360,
+      "height": 60
+    },
+    "root": {
+      "type": "view",
+      "layout": "border",
+      "spacing": 10,
+      "components": [
+        {
+          "constraints": {
+            "region": "left",
+            "position": "centre"
+          },
+          "id": "statusIcon",
+          "type": "imageview",
+          "contenttintcolour": "systemRedColor",
+          "image": {
+            "type": "symbol",
+            "src": "waveform.circle.fill",
+            "size": {
+              "width": 24,
+              "height": 24
+            }
+          }
+        },
+        {
+          "constraints": {
+            "region": "centre"
+          },
+          "type": "view",
+          "layout": "inline",
+          "direction": "vertical",
+          "spacing": 2,
+          "components": [
+            {
+              "id": "statusLabel",
+              "type": "label",
+              "text": "Recording...",
+              "font": {
+                "weight": "semibold"
+              }
+            },
+            {
+              "id": "timerLabel",
+              "type": "label",
+              "text": "00:00",
+              "colour": "secondaryLabelColor",
+              "font": {
+                "size": "small",
+                "monospaced": "digits"
+              }
+            }
+          ]
+        },
+        {
+          "constraints": {
+            "region": "right",
+            "position": "centre"
+          },
+          "type": "view",
+          "layout": "inline",
+          "direction": "horizontal",
+          "spacing": 6,
+          "components": [
+            {
+              "id": "stopBtn",
+              "type": "button",
+              "text": "Stop",
+              "shortcut": "↩︎",
+              "events": [
+                {
+                  "triggers": "actioned",
+                  "action": {
+                    "type": "script",
+                    "src": "./scripts/hud_action.sh",
+                    "args": [
+                      "stop"
+                    ],
+                    "async": true
+                  }
+                }
+              ]
+            },
+            {
+              "id": "cancelBtn",
+              "type": "button",
+              "text": "Cancel",
+              "shortcut": "⎋",
+              "events": [
+                {
+                  "triggers": "actioned",
+                  "action": {
+                    "type": "script",
+                    "src": "./scripts/hud_action.sh",
+                    "args": [
+                      "cancel"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,352 @@
+{
+  "bundleid": "com.zettt.whisper-alfred.history",
+  "window": {
+    "title": "Whisper Alfred — Transcript History",
+    "size": {
+      "width": 860,
+      "height": 540
+    },
+    "padding": 12,
+    "root": {
+      "type": "view",
+      "layout": "border",
+      "spacing": 10,
+      "shortcuts": [
+        {
+          "shortcut": "↑",
+          "action": {
+            "type": "function",
+            "src": "historyList",
+            "args": "selectup"
+          }
+        },
+        {
+          "shortcut": "↓",
+          "action": {
+            "type": "function",
+            "src": "historyList",
+            "args": "selectdown"
+          }
+        },
+        {
+          "shortcut": "⌘R",
+          "action": {
+            "type": "script",
+            "src": "./scripts/history_action.sh",
+            "args": [
+              "refresh"
+            ]
+          }
+        }
+      ],
+      "components": [
+        {
+          "constraints": {
+            "region": "top"
+          },
+          "id": "searchField",
+          "type": "textfield",
+          "placeholder": "Search transcripts, dates, providers...",
+          "focus": true,
+          "events": [
+            {
+              "triggers": "changed",
+              "action": {
+                "type": "function",
+                "src": "historyList",
+                "args": "filterdata"
+              }
+            }
+          ]
+        },
+        {
+          "constraints": {
+            "region": "left",
+            "size": {
+              "width": 320
+            }
+          },
+          "id": "historyList",
+          "type": "dataview",
+          "placeholder": "No recordings found",
+          "cell": {
+            "height": 54,
+            "init": {
+              "cellBox.background": null,
+              "cellTitle.colour": "labelColor",
+              "cellSubtitle.colour": "secondaryLabelColor"
+            },
+            "selected": {
+              "cellBox.background": "alfredSelectedResultBackgroundColor",
+              "cellTitle.colour": "alfredSelectedResultTextColor",
+              "cellSubtitle.colour": "alfredSelectedResultTextColor"
+            },
+            "root": {
+              "id": "cellBox",
+              "type": "view",
+              "layout": "inline",
+              "direction": "vertical",
+              "padding": 6,
+              "spacing": 2,
+              "cornerradius": 6,
+              "components": [
+                {
+                  "id": "cellTitle",
+                  "type": "label",
+                  "font": {
+                    "size": "small",
+                    "weight": "semibold"
+                  }
+                },
+                {
+                  "id": "cellSubtitle",
+                  "type": "label",
+                  "linebreak": "truncatetail",
+                  "font": {
+                    "size": "extrasmall"
+                  }
+                }
+              ]
+            }
+          },
+          "data": {
+            "type": "basic",
+            "src": "{fileraw:resources/history_data.json}",
+            "filter": {
+              "type": "basic",
+              "args": [
+                "cellTitle.text",
+                "cellSubtitle.text",
+                "cellPolished.text",
+                "cellRaw.text"
+              ],
+              "match": "{value:searchField.text}"
+            }
+          },
+          "events": [
+            {
+              "triggers": [
+                "preload",
+                "launched",
+                "changed"
+              ],
+              "action": {
+                "type": "json",
+                "variables": {
+                  "polished": "{value:historyList.selected.cellPolished.text}",
+                  "raw": "{value:historyList.selected.cellRaw.text}",
+                  "meta": "{value:historyList.selected.cellMeta.text}"
+                },
+                "src": {
+                  "update": {
+                    "ids": {
+                      "polishedArea": {
+                        "text": "{var:polished}"
+                      },
+                      "rawArea": {
+                        "text": "{var:raw}"
+                      },
+                      "metaLabel": {
+                        "text": "{var:meta}"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "constraints": {
+            "region": "centre"
+          },
+          "type": "view",
+          "layout": "border",
+          "spacing": 8,
+          "components": [
+            {
+              "constraints": {
+                "region": "top"
+              },
+              "id": "metaLabel",
+              "type": "label",
+              "text": "Select a recording",
+              "colour": "secondaryLabelColor",
+              "linebreak": "truncatetail",
+              "font": {
+                "size": "small"
+              }
+            },
+            {
+              "constraints": {
+                "region": "centre"
+              },
+              "type": "view",
+              "layout": "grid",
+              "rows": 2,
+              "cols": 1,
+              "spacing": 8,
+              "components": [
+                {
+                  "type": "view",
+                  "layout": "border",
+                  "spacing": 4,
+                  "components": [
+                    {
+                      "constraints": {
+                        "region": "top"
+                      },
+                      "type": "label",
+                      "text": "Polished / Final Transcript",
+                      "font": {
+                        "size": "small",
+                        "weight": "semibold"
+                      }
+                    },
+                    {
+                      "constraints": {
+                        "region": "centre"
+                      },
+                      "id": "polishedArea",
+                      "type": "textarea",
+                      "bordertype": "bezel",
+                      "editable": true,
+                      "selectable": true
+                    }
+                  ]
+                },
+                {
+                  "type": "view",
+                  "layout": "border",
+                  "spacing": 4,
+                  "components": [
+                    {
+                      "constraints": {
+                        "region": "top"
+                      },
+                      "type": "label",
+                      "text": "Raw Transcription",
+                      "font": {
+                        "size": "small",
+                        "weight": "semibold"
+                      }
+                    },
+                    {
+                      "constraints": {
+                        "region": "centre"
+                      },
+                      "id": "rawArea",
+                      "type": "textarea",
+                      "bordertype": "bezel",
+                      "editable": true,
+                      "selectable": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "constraints": {
+                "region": "bottom"
+              },
+              "type": "view",
+              "layout": "inline",
+              "direction": "horizontal",
+              "spacing": 8,
+              "components": [
+                {
+                  "type": "button",
+                  "text": "Copy Polished",
+                  "shortcut": "↩︎",
+                  "events": [
+                    {
+                      "triggers": "actioned",
+                      "action": {
+                        "type": "json",
+                        "variables": {
+                          "txt": "{value:polishedArea.text}"
+                        },
+                        "src": {
+                          "copy": {
+                            "type": "text",
+                            "src": "{var:txt}"
+                          },
+                          "finish": {}
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "Copy Raw",
+                  "shortcut": "⌥↩︎",
+                  "events": [
+                    {
+                      "triggers": "actioned",
+                      "action": {
+                        "type": "json",
+                        "variables": {
+                          "txt": "{value:rawArea.text}"
+                        },
+                        "src": {
+                          "copy": {
+                            "type": "text",
+                            "src": "{var:txt}"
+                          },
+                          "finish": {}
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "Play Audio",
+                  "shortcut": "⌘P",
+                  "events": [
+                    {
+                      "triggers": "actioned",
+                      "action": {
+                        "type": "script",
+                        "src": "./scripts/history_action.sh",
+                        "args": [
+                          "play",
+                          "{value:historyList.selected.cellAudio.text}"
+                        ],
+                        "async": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "Delete",
+                  "shortcut": "⌘⌫",
+                  "events": [
+                    {
+                      "triggers": "actioned",
+                      "confirm": {
+                        "message": "Delete selected recording and transcript?",
+                        "confirmbuttontext": "Delete",
+                        "cancelbuttontext": "Cancel"
+                      },
+                      "action": {
+                        "type": "script",
+                        "src": "./scripts/history_action.sh",
+                        "args": [
+                          "delete",
+                          "{value:historyList.selected.cellJson.text}"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
