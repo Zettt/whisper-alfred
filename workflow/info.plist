@@ -1,0 +1,1353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.zettt.whisper-alfred</string>
+	<key>category</key>
+	<string>Productivity</string>
+	<key>connections</key>
+	<dict>
+		<key>063BAF88-77A7-461D-ACCB-3FD40C2D4017</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1654C82B-4787-48AD-BFD4-2BE9BEC4F4BF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>DBEBA144-5512-496A-B08A-63FDF5F69BBF</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000010</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>1654C82B-4787-48AD-BFD4-2BE9BEC4F4BF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>BBB0DAF9-A820-4E00-A4A8-35C1911D91ED</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>1818A83B-5F44-4E96-88C2-D3284F397B26</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>063BAF88-77A7-461D-ACCB-3FD40C2D4017</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>4C13CCCB-75F5-486B-81DF-F47757BECF07</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4F86C9D3-C65E-4D10-8B9C-74D744E3C9AC</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<true/>
+			</dict>
+		</array>
+		<key>7F06D968-A68C-481E-83C0-7B45F509D2D1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1818A83B-5F44-4E96-88C2-D3284F397B26</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>96044FCE-DD2A-4377-A620-9F0FCC3E7BFE</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1818A83B-5F44-4E96-88C2-D3284F397B26</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>BBB0DAF9-A820-4E00-A4A8-35C1911D91ED</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000001</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>CEFFE7D5-E06E-4FC6-800F-6B38062BCBC7</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>43187ABD-0700-45AF-9130-BBB93018E7A5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000001</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000003</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000002</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>33222A3F-6B70-46C3-BD28-F4FC00C04738</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000004</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000004</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4F86C9D3-C65E-4D10-8B9C-74D744E3C9AC</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000005</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000006</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000007</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000008</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000008</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E1A2B3C4-1111-4000-8000-000000000009</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E1A2B3C4-1111-4000-8000-000000000011</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1818A83B-5F44-4E96-88C2-D3284F397B26</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Zettt</string>
+	<key>description</key>
+	<string>Use Mistral, Groq, or Whisper.cpp to whisper into any text field on your Mac.</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Whisper Alfred</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>24</integer>
+				<key>hotmod</key>
+				<integer>393216</integer>
+				<key>hotstring</key>
+				<string>=</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>7F06D968-A68C-481E-83C0-7B45F509D2D1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/transcribe.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1654C82B-4787-48AD-BFD4-2BE9BEC4F4BF</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/toggle_rec.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1818A83B-5F44-4E96-88C2-D3284F397B26</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/polish.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>BBB0DAF9-A820-4E00-A4A8-35C1911D91ED</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>33222A3F-6B70-46C3-BD28-F4FC00C04738</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{query}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>1</integer>
+						<key>matchstring</key>
+						<string></string>
+						<key>outputlabel</key>
+						<string></string>
+						<key>uid</key>
+						<string>DBEBA144-5512-496A-B08A-63FDF5F69BBF</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>else</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>063BAF88-77A7-461D-ACCB-3FD40C2D4017</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>whisper</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Start/Stop Dictation</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>96044FCE-DD2A-4377-A620-9F0FCC3E7BFE</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/prune.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>4F86C9D3-C65E-4D10-8B9C-74D744E3C9AC</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>whisper prune</string>
+				<key>queuedelaycustom</key>
+				<integer>1</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Scanning recordings folder...</string>
+				<key>script</key>
+				<string>./scripts/prune_filter.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Manage recordings and transcript storage</string>
+				<key>title</key>
+				<string>Prune Recorded Files</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>4C13CCCB-75F5-486B-81DF-F47757BECF07</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/open_recordings.sh "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>43187ABD-0700-45AF-9130-BBB93018E7A5</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>keyword</key>
+				<string>whisper open</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Open Transcripts Folder</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>CEFFE7D5-E06E-4FC6-800F-6B38062BCBC7</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{query}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>4</integer>
+						<key>matchstring</key>
+						<string>^\[Whisper Alfred Error:</string>
+						<key>outputlabel</key>
+						<string>Error</string>
+						<key>uid</key>
+						<string>E1A2B3C4-1111-4000-8000-000000000002</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>else</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000001</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Whisper Alfred Error</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000003</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>auto</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000004</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>whisper cancel</string>
+				<key>subtext</key>
+				<string>Abort active dictation recording and delete partial audio</string>
+				<key>text</key>
+				<string>Cancel Dictation Recording</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000005</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/toggle_rec.sh cancel</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000006</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>whisper history</string>
+				<key>subtext</key>
+				<string>Search, replay, and copy past transcriptions</string>
+				<key>text</key>
+				<string>Browse Transcript History</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000007</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./scripts/history_prepare.sh</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000008</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>launchmode</key>
+				<integer>0</integer>
+				<key>path</key>
+				<string>history.alfredui</string>
+				<key>stackview</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.userinterface.alfredui</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000009</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>launchmode</key>
+				<integer>1</integer>
+				<key>path</key>
+				<string>hud.alfredui</string>
+				<key>stackview</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.userinterface.alfredui</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000010</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>availableviaurlhandler</key>
+				<false/>
+				<key>triggerid</key>
+				<string>toggle_dictation</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>E1A2B3C4-1111-4000-8000-000000000011</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># Whisper Alfred 🎙️
+
+## Setup
+
+Install `ffmpeg` via Homebrew:
+
+```bash
+brew install ffmpeg
+```
+
+Double-click `Whisper Alfred.alfredworkflow` in Finder (built at the repository root via `./scripts/package.sh` or downloaded from GitHub Releases) to import or update the workflow in Alfred.
+
+*Note: macOS will prompt for Microphone permissions on first run. Ensure Alfred has microphone access under System Settings → Privacy &amp; Security → Microphone.*
+
+## Usage
+
+Dictate text into any active application via the Hotkey (default: &lt;kbd&gt;⇧&lt;/kbd&gt;&lt;kbd&gt;⌃&lt;/kbd&gt;&lt;kbd&gt;=&lt;/kbd&gt;) or via the `whisper` keyword.
+
+Press once to start recording, and press again (or click **Stop** / press &lt;kbd&gt;↩︎&lt;/kbd&gt; on the status HUD) to stop, transcribe, clean up, and paste the output into your frontmost application.
+
+Available keywords:
+
+- `whisper`: Start or stop dictation recording manually.
+- `whisper cancel`: Abort an active dictation recording and delete partial audio.
+- `whisper history`: Open the Transcript History window (`history.alfredui`) to search transcripts, inspect polished and raw text, play back audio, copy text, and delete entries.
+- `whisper open`: Open the workflow’s recordings directory in Finder.
+- `whisper prune`: Open an interactive Script Filter showing recording counts, storage usage, and prune actions (`auto`, `recordings`, `keep N`, `archive`, `force`, or `&lt;N&gt;` days).
+
+### Features
+
+- ⚡ **Hotkey Toggle:** Press once to start recording, press again to transcribe and paste into your frontmost app.
+- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (&lt;kbd&gt;↩︎&lt;/kbd&gt;), and Cancel (&lt;kbd&gt;⎋&lt;/kbd&gt;) buttons.
+- 📜 **Transcript History Browser:** Searchable Alfred UI browser (`history.alfredui`) with side-by-side polished and raw transcripts, audio playback, clipboard copy, and entry deletion.
+- 🌐 **Multi-Provider Support:** Switch between Mistral AI, Groq Cloud, and offline Local AI for both transcription and cleanup.
+- ✨ **LLM Text Cleanup:** Fixes grammar, removes filler words (*um, uh*), and cleans punctuation before pasting.
+- 🔒 **Offline Local Mode:** Run speech recognition locally on Apple Silicon Metal GPU.
+- 🧹 **Configurable Retention:** Prunes recordings older than `RETENTION_DAYS` (default: 30 days) and optionally caps stored recordings via `MAX_RECORDINGS`.
+
+## Cloud Setup (Mistral AI &amp; Groq Cloud)
+
+Cloud providers offer fast setup and high accuracy:
+
+- **Mistral AI:** Recommended for EU data residency (`voxtral-mini-latest` for transcription, `mistral-small-latest` for cleanup). Get key at [Mistral Console](https://admin.mistral.ai/organization/api-keys).
+- **Groq Cloud:** Recommended for maximum speed and generous free tier (`whisper-large-v3-turbo` for transcription, `llama-3.1-8b-instant` for cleanup). Get key at [Groq Console](https://console.groq.com/keys).
+
+## Local Setup (Offline Mode)
+
+Run transcription locally on your Apple Silicon GPU using one of these engines:
+
+| Engine | Best For | Setup | Binary / Command |
+| --- | --- | --- | --- |
+| **Whisper.cpp** | High accuracy (German/English), proper punctuation | Homebrew | `whisper-server -m ~/.models/ggml-base.bin --port 8080` |
+| **Faster-Whisper** | Python CTranslate2 engine | `pip install faster-whisper-server` | `faster-whisper-server --port 8080 --model base` |
+| **NVIDIA Parakeet** | Ultra-fast inference &amp; low RAM on Apple Silicon | `pip install sherpa-onnx` | `sherpa-onnx-offline-http-server --port=8080` |
+
+## Workflow Configuration
+
+Set provider keys, endpoints, models, and retention settings in the Workflow’s Configuration:
+
+| Environment Variable | Default Value | Description |
+| --- | --- | --- |
+| **`TRANSCRIPTION_PROVIDER`** | `mistral` | Transcription backend (`mistral`, `groq`, or `local`). |
+| **`TRANSCRIPTION_MODEL`** | *(provider default)* | Override default transcription model string. |
+| **`PARAKEET_ENDPOINT`** | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint URL for local server transcription. |
+| **`MISTRAL_API_KEY`** | *(empty)* | API Key for Mistral AI backend. |
+| **`GROQ_API_KEY`** | *(empty)* | API Key for Groq Cloud backend. |
+| **`ENABLE_CLEANUP`** | `true` | Run LLM post-processing to fix grammar and remove filler words. |
+| **`CLEANUP_PROVIDER`** | `mistral` | LLM cleanup backend (`mistral`, `groq`, or `local`). |
+| **`CLEANUP_MODEL`** | *(provider default)* | Override default LLM text cleanup model string. |
+| **`CLEANUP_SYSTEM_PROMPT`** | *(default prompt)* | Optional custom system prompt overriding default cleanup rules. |
+| **`LOCAL_CLEANUP_ENDPOINT`** | `http://127.0.0.1:11434/v1/chat/completions` | Endpoint URL for local LLM cleanup (Ollama / LM Studio). |
+| **`AUDIO_FORMAT`** | `m4a` | Audio recording container format (`m4a` or `wav`). |
+| **`MAX_RECORDING_DURATION`** | `600` | Maximum recording length in seconds (`0` disables limit). |
+| **`RETENTION_DAYS`** | `30` | Days to keep local audio recordings and metadata sidecars before auto-pruning. |
+| **`MAX_RECORDINGS`** | `0` | Maximum number of recent recordings to retain on disk (`0` disables cap). |
+
+## Development &amp; Packaging
+
+All unpacked workflow source files live in `workflow/` and the workflow version is centralized in `VERSION`:
+
+- `workflow/`: Unpacked Alfred workflow payload (`info.plist`, `icon.png`, `scripts/`, `history.alfredui/`, `hud.alfredui/`).
+- `VERSION`: Single source of truth for the workflow version.
+- `scripts/package.sh`: Syncs `VERSION` and `README.md` into `workflow/info.plist`, validates configuration, and outputs `Whisper Alfred.alfredworkflow` at the repository root.
+- `test/test_workflow.sh`: Automated verification suite.
+
+Package the workflow using the current `VERSION` or bump to a new version:
+
+```bash
+./scripts/package.sh        # Builds ./Whisper Alfred.alfredworkflow from workflow/
+./scripts/package.sh 0.8.4  # Updates VERSION, syncs workflow/info.plist, and rebuilds package
+```
+
+Double-click `Whisper Alfred.alfredworkflow` in Finder to import or update your local Alfred installation.
+
+Run the verification suite:
+
+```bash
+./test/test_workflow.sh
+```
+
+## Technical &amp; Audio Recording Details
+
+By default, the workflow uses `ffmpeg` to capture 16kHz mono audio directly into compressed MPEG-4 (`.m4a` AAC) format to maximize upload speed and reduce disk usage by 80%+ while remaining fully compatible with Groq, Mistral, and Faster-Whisper:
+
+```bash
+nohup ffmpeg -hide_banner -loglevel error -y "${DURATION_ARGS[@]}" -thread_queue_size 1024 -f avfoundation -i ":default" -ar 16000 -ac 1 -c:a aac -b:a 64k "$AUDIO_PATH" &gt;"$LOG_FILE" 2&gt;&amp;1 &lt;/dev/null &amp;
+```
+
+If a local server is offline when triggering dictation, Whisper Alfred pastes an error notification into your active application:
+
+```text
+[Whisper Alfred Error: Could not connect to local server on http://127.0.0.1:8080/v1/audio/transcriptions. Please verify your local server is running.]
+```
+</string>
+	<key>uidata</key>
+	<dict>
+		<key>063BAF88-77A7-461D-ACCB-3FD40C2D4017</key>
+		<dict>
+			<key>xpos</key>
+			<real>370</real>
+			<key>ypos</key>
+			<real>170</real>
+		</dict>
+		<key>1654C82B-4787-48AD-BFD4-2BE9BEC4F4BF</key>
+		<dict>
+			<key>note</key>
+			<string>Transcription Dispatcher</string>
+			<key>xpos</key>
+			<real>455</real>
+			<key>ypos</key>
+			<real>140</real>
+		</dict>
+		<key>1818A83B-5F44-4E96-88C2-D3284F397B26</key>
+		<dict>
+			<key>note</key>
+			<string>Recording Toggle</string>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>140</real>
+		</dict>
+		<key>33222A3F-6B70-46C3-BD28-F4FC00C04738</key>
+		<dict>
+			<key>note</key>
+			<string>Paste output. Also copy to clipboard (if direct pasting fails it's still on the clipboard history).</string>
+			<key>xpos</key>
+			<real>960</real>
+			<key>ypos</key>
+			<real>170</real>
+		</dict>
+		<key>43187ABD-0700-45AF-9130-BBB93018E7A5</key>
+		<dict>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>520</real>
+		</dict>
+		<key>4C13CCCB-75F5-486B-81DF-F47757BECF07</key>
+		<dict>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>330</real>
+		</dict>
+		<key>4F86C9D3-C65E-4D10-8B9C-74D744E3C9AC</key>
+		<dict>
+			<key>note</key>
+			<string>Audio Pruner: periodic cleanup of old transcriptions.</string>
+			<key>xpos</key>
+			<real>960</real>
+			<key>ypos</key>
+			<real>330</real>
+		</dict>
+		<key>7F06D968-A68C-481E-83C0-7B45F509D2D1</key>
+		<dict>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>90</real>
+		</dict>
+		<key>96044FCE-DD2A-4377-A620-9F0FCC3E7BFE</key>
+		<dict>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>200</real>
+		</dict>
+		<key>BBB0DAF9-A820-4E00-A4A8-35C1911D91ED</key>
+		<dict>
+			<key>note</key>
+			<string>LLM Polish Dispatcher</string>
+			<key>xpos</key>
+			<real>620</real>
+			<key>ypos</key>
+			<real>140</real>
+		</dict>
+		<key>CEFFE7D5-E06E-4FC6-800F-6B38062BCBC7</key>
+		<dict>
+			<key>note</key>
+			<string>Open the recordings folder.</string>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>520</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000001</key>
+		<dict>
+			<key>xpos</key>
+			<real>780</real>
+			<key>ypos</key>
+			<real>160</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000003</key>
+		<dict>
+			<key>note</key>
+			<string>Display transcription error notification.</string>
+			<key>xpos</key>
+			<real>960</real>
+			<key>ypos</key>
+			<real>40</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000004</key>
+		<dict>
+			<key>xpos</key>
+			<real>875</real>
+			<key>ypos</key>
+			<real>290</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000005</key>
+		<dict>
+			<key>note</key>
+			<string>Abort active recording.</string>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>650</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000006</key>
+		<dict>
+			<key>note</key>
+			<string>Cancel active recording.</string>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>650</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000007</key>
+		<dict>
+			<key>note</key>
+			<string>Open Transcript History UI.</string>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>780</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000008</key>
+		<dict>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>780</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000009</key>
+		<dict>
+			<key>xpos</key>
+			<real>380</real>
+			<key>ypos</key>
+			<real>780</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000010</key>
+		<dict>
+			<key>note</key>
+			<string>Floating recording status HUD.</string>
+			<key>xpos</key>
+			<real>455</real>
+			<key>ypos</key>
+			<real>270</real>
+		</dict>
+		<key>E1A2B3C4-1111-4000-8000-000000000011</key>
+		<dict>
+			<key>note</key>
+			<string>External trigger for HUD Stop button.</string>
+			<key>xpos</key>
+			<real>45</real>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>mistral</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>Groq</string>
+						<string>groq</string>
+					</array>
+					<array>
+						<string>Mistral</string>
+						<string>mistral</string>
+					</array>
+					<array>
+						<string>Local</string>
+						<string>local</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>Set this to one of the supported cloud providers or use a local inference endpoint (requires additional setup).</string>
+			<key>label</key>
+			<string>Transcription Provider</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>TRANSCRIPTION_PROVIDER</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>Leave empty for provider default</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Optional model identifier override. Leave empty to use provider default: whisper-large-v3-turbo (Groq), voxtral-mini-latest (Mistral), local (Local).</string>
+			<key>label</key>
+			<string>Transcription Model</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>TRANSCRIPTION_MODEL</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>http://127.0.0.1:8080/v1/audio/transcriptions</string>
+				<key>placeholder</key>
+				<string>http://127.0.0.1:8080/v1/audio/transcriptions</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Endpoint URL for local transcription servers (Whisper.cpp, Faster-Whisper, Parakeet).</string>
+			<key>label</key>
+			<string>Local Transcribe URL</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>PARAKEET_ENDPOINT</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Mistral AI authentication key. Acquire at: https://admin.mistral.ai/organization/api-keys</string>
+			<key>label</key>
+			<string>Mistral API Key</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>MISTRAL_API_KEY</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>API key for Groq. Get one here: https://console.groq.com/keys</string>
+			<key>label</key>
+			<string>Groq API Key</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>GROQ_API_KEY</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+			</dict>
+			<key>description</key>
+			<string>Run an additional step to fix grammar and remove filler words. This can also use a local LLM or one of the cloud providers.</string>
+			<key>label</key>
+			<string>Enable Cleanup</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>ENABLE_CLEANUP</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>mistral</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>Mistral</string>
+						<string>mistral</string>
+					</array>
+					<array>
+						<string>Groq</string>
+						<string>groq</string>
+					</array>
+					<array>
+						<string>Local</string>
+						<string>local</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>The model to use for the cleanup step.</string>
+			<key>label</key>
+			<string>Cleanup Provider</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>CLEANUP_PROVIDER</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>Leave empty for provider default</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Optional model identifier override. Leave empty to use provider default: mistral-small-latest (Mistral), llama-3.1-8b-instant (Groq), llama3.2 (Local).</string>
+			<key>label</key>
+			<string>Cleanup Model</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>CLEANUP_MODEL</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>Leave empty for default cleanup prompt</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+				<key>verticalsize</key>
+				<integer>4</integer>
+			</dict>
+			<key>description</key>
+			<string>Optional custom system prompt overriding the default cleanup rules.</string>
+			<key>label</key>
+			<string>Cleanup Prompt</string>
+			<key>type</key>
+			<string>textarea</string>
+			<key>variable</key>
+			<string>CLEANUP_SYSTEM_PROMPT</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>http://127.0.0.1:11434/v1/chat/completions</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Endpoint for using local LLM Cleanup, e.g. via LM Studio or Ollama. Example: http://127.0.0.1:11434/v1/chat/completions</string>
+			<key>label</key>
+			<string>Local Cleanup URL</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>LOCAL_CLEANUP_ENDPOINT</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>m4a</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>M4A (AAC)</string>
+						<string>m4a</string>
+					</array>
+					<array>
+						<string>WAV (PCM)</string>
+						<string>wav</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>Audio recording container format.</string>
+			<key>label</key>
+			<string>Audio Format</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>AUDIO_FORMAT</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>600</string>
+				<key>placeholder</key>
+				<string>600</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Maximum single recording length in seconds before ffmpeg stops automatically (0 disables limit).</string>
+			<key>label</key>
+			<string>Max Recording (s)</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>MAX_RECORDING_DURATION</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>30</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>For how long to keep transcription files available (in days).</string>
+			<key>label</key>
+			<string>Retention Days</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>RETENTION_DAYS</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>0</string>
+				<key>placeholder</key>
+				<string>0</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Maximum number of recent recordings to retain on disk (0 disables count cap).</string>
+			<key>label</key>
+			<string>Max Recordings</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>MAX_RECORDINGS</string>
+		</dict>
+	</array>
+	<key>variablesdontexport</key>
+	<array>
+		<string>MISTRAL_API_KEY</string>
+		<string>GROQ_API_KEY</string>
+	</array>
+	<key>version</key>
+	<string>0.8.3</string>
+	<key>webaddress</key>
+	<string>https://zettt.com</string>
+</dict>
+</plist>
