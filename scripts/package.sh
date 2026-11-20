@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Package Whisper Alfred workflow into Whisper Alfred.alfredworkflow at repository root
-# Syncs VERSION and README.md into workflow/info.plist, validates plist/keys, and bundles workflow/ contents.
+# Syncs VERSION and workflow/README.md into workflow/info.plist, validates plist/keys, and bundles workflow/ contents.
 
 set -euo pipefail
 
@@ -9,7 +9,7 @@ SCRIPT_DIR="${0:A:h}"
 ROOT_DIR="${SCRIPT_DIR:h}"
 WORKFLOW_DIR="$ROOT_DIR/workflow"
 VERSION_FILE="$ROOT_DIR/VERSION"
-README_PATH="$ROOT_DIR/README.md"
+README_PATH="$WORKFLOW_DIR/README.md"
 PLIST_PATH="$WORKFLOW_DIR/info.plist"
 ICON_PATH="$WORKFLOW_DIR/icon.png"
 OUTPUT_WORKFLOW="$ROOT_DIR/Whisper Alfred.alfredworkflow"

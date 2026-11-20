@@ -247,11 +247,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>24</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>393216</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>=</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -392,7 +392,7 @@
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>whisper</string>
+				<string>{var:WHISPER_KEYWORD}</string>
 				<key>subtext</key>
 				<string></string>
 				<key>text</key>
@@ -446,7 +446,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>whisper prune</string>
+				<string>{var:WHISPER_KEYWORD} prune</string>
 				<key>queuedelaycustom</key>
 				<integer>1</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -506,15 +506,15 @@
 			<key>config</key>
 			<dict>
 				<key>argumenttype</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>keyword</key>
-				<string>whisper open</string>
+				<string>{var:WHISPER_KEYWORD} open</string>
 				<key>subtext</key>
 				<string></string>
 				<key>text</key>
 				<string>Open Transcripts Folder</string>
 				<key>withspace</key>
-				<true/>
+				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.input.keyword</string>
@@ -599,7 +599,7 @@
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>whisper cancel</string>
+				<string>{var:WHISPER_KEYWORD} cancel</string>
 				<key>subtext</key>
 				<string>Abort active dictation recording and delete partial audio</string>
 				<key>text</key>
@@ -643,7 +643,7 @@
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>whisper history</string>
+				<string>{var:WHISPER_KEYWORD} history</string>
 				<key>subtext</key>
 				<string>Search, replay, and copy past transcriptions</string>
 				<key>text</key>
@@ -732,119 +732,32 @@
 		</dict>
 	</array>
 	<key>readme</key>
-	<string># Whisper Alfred 🎙️
+	<string>## Setup
 
-## Setup
+Ensure Alfred has microphone access under **System Settings → Privacy &amp; Security → Microphone**. macOS will also prompt for Microphone permissions on first run.
 
-Install `ffmpeg` via Homebrew:
-
-```bash
-brew install ffmpeg
-```
-
-Double-click `Whisper Alfred.alfredworkflow` in Finder (built at the repository root via `./scripts/package.sh` or downloaded from GitHub Releases) to import or update the workflow in Alfred.
-
-*Note: macOS will prompt for Microphone permissions on first run. Ensure Alfred has microphone access under System Settings → Privacy &amp; Security → Microphone.*
+If you select **Local** in the Workflow’s Configuration, run an OpenAI-compatible transcription server (such as `whisper-server`, `faster-whisper-server`, or `sherpa-onnx-offline-http-server`) and optionally a local LLM server (such as Ollama or LM Studio) for cleanup.
 
 ## Usage
 
-Dictate text into any active application via the Hotkey (default: &lt;kbd&gt;⇧&lt;/kbd&gt;&lt;kbd&gt;⌃&lt;/kbd&gt;&lt;kbd&gt;=&lt;/kbd&gt;) or via the `whisper` keyword.
+Dictate text into any active application via the `whisper` keyword. Trigger once to start recording, and trigger again to stop, transcribe, clean up, and paste into the frontmost application.
 
-Press once to start recording, and press again (or click **Stop** / press &lt;kbd&gt;↩︎&lt;/kbd&gt; on the status HUD) to stop, transcribe, clean up, and paste the output into your frontmost application.
+![Recording status HUD](images/hud.png)
 
-Available keywords:
+Configure the Hotkey for faster triggering. While recording, the status HUD shows progress and lets you stop or cancel:
 
-- `whisper`: Start or stop dictation recording manually.
-- `whisper cancel`: Abort an active dictation recording and delete partial audio.
-- `whisper history`: Open the Transcript History window (`history.alfredui`) to search transcripts, inspect polished and raw text, play back audio, copy text, and delete entries.
-- `whisper open`: Open the workflow’s recordings directory in Finder.
-- `whisper prune`: Open an interactive Script Filter showing recording counts, storage usage, and prune actions (`auto`, `recordings`, `keep N`, `archive`, `force`, or `&lt;N&gt;` days).
+* &lt;kbd&gt;↩&lt;/kbd&gt; Stop recording, transcribe, and paste.
+* &lt;kbd&gt;⎋&lt;/kbd&gt; Cancel recording and discard audio.
 
-### Features
+Alternatively, browse past transcripts via the `whisper history` keyword.
 
-- ⚡ **Hotkey Toggle:** Press once to start recording, press again to transcribe and paste into your frontmost app.
-- 🪟 **Floating Status HUD:** Borderless Alfred UI window (`hud.alfredui`) displaying live recording duration, pipeline stage (`Recording...`, `Transcribing...`, `Polishing...`), Stop (&lt;kbd&gt;↩︎&lt;/kbd&gt;), and Cancel (&lt;kbd&gt;⎋&lt;/kbd&gt;) buttons. Drag the HUD to any screen position (such as top-center under the notch); Alfred saves that position for subsequent recordings.
-- 📜 **Transcript History Browser:** Searchable Alfred UI browser (`history.alfredui`) with side-by-side polished and raw transcripts, audio playback, clipboard copy, and entry deletion.
-- 🌐 **Multi-Provider Support:** Switch between Mistral AI, Groq Cloud, and offline Local AI for both transcription and cleanup.
-- ✨ **LLM Text Cleanup:** Fixes grammar, removes filler words (*um, uh*), and cleans punctuation before pasting.
-- 🔒 **Offline Local Mode:** Run speech recognition locally on Apple Silicon Metal GPU.
-- 🧹 **Configurable Retention:** Prunes recordings older than `RETENTION_DAYS` (default: 30 days) and optionally caps stored recordings via `MAX_RECORDINGS`.
+![Transcript history browser](images/history.png)
 
-## Cloud Setup (Mistral AI &amp; Groq Cloud)
+Manage stored recordings via the `whisper cancel`, `whisper open`, and `whisper prune` keywords.
 
-Cloud providers offer fast setup and high accuracy:
+![Pruning stored recordings](images/prune.png)
 
-- **Mistral AI:** Recommended for EU data residency (`voxtral-mini-latest` for transcription, `mistral-small-latest` for cleanup). Get key at [Mistral Console](https://admin.mistral.ai/organization/api-keys).
-- **Groq Cloud:** Recommended for maximum speed and generous free tier (`whisper-large-v3-turbo` for transcription, `llama-3.1-8b-instant` for cleanup). Get key at [Groq Console](https://console.groq.com/keys).
-
-## Local Setup (Offline Mode)
-
-Run transcription locally on your Apple Silicon GPU using one of these engines:
-
-| Engine | Best For | Setup | Binary / Command |
-| --- | --- | --- | --- |
-| **Whisper.cpp** | High accuracy (German/English), proper punctuation | Homebrew | `whisper-server -m ~/.models/ggml-base.bin --port 8080` |
-| **Faster-Whisper** | Python CTranslate2 engine | `pip install faster-whisper-server` | `faster-whisper-server --port 8080 --model base` |
-| **NVIDIA Parakeet** | Ultra-fast inference &amp; low RAM on Apple Silicon | `pip install sherpa-onnx` | `sherpa-onnx-offline-http-server --port=8080` |
-
-## Workflow Configuration
-
-Set provider keys, endpoints, models, and retention settings in the Workflow’s Configuration:
-
-| Environment Variable | Default Value | Description |
-| --- | --- | --- |
-| **`TRANSCRIPTION_PROVIDER`** | `mistral` | Transcription backend (`mistral`, `groq`, or `local`). |
-| **`TRANSCRIPTION_MODEL`** | *(provider default)* | Override default transcription model string. |
-| **`PARAKEET_ENDPOINT`** | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint URL for local server transcription. |
-| **`MISTRAL_API_KEY`** | *(empty)* | API Key for Mistral AI backend. |
-| **`GROQ_API_KEY`** | *(empty)* | API Key for Groq Cloud backend. |
-| **`ENABLE_CLEANUP`** | `true` | Run LLM post-processing to fix grammar and remove filler words. |
-| **`CLEANUP_PROVIDER`** | `mistral` | LLM cleanup backend (`mistral`, `groq`, or `local`). |
-| **`CLEANUP_MODEL`** | *(provider default)* | Override default LLM text cleanup model string. |
-| **`CLEANUP_SYSTEM_PROMPT`** | *(default prompt)* | Optional custom system prompt overriding default cleanup rules. |
-| **`LOCAL_CLEANUP_ENDPOINT`** | `http://127.0.0.1:11434/v1/chat/completions` | Endpoint URL for local LLM cleanup (Ollama / LM Studio). |
-| **`AUDIO_FORMAT`** | `m4a` | Audio recording container format (`m4a` or `wav`). |
-| **`MAX_RECORDING_DURATION`** | `600` | Maximum recording length in seconds (`0` disables limit). |
-| **`RETENTION_DAYS`** | `30` | Days to keep local audio recordings and metadata sidecars before auto-pruning. |
-| **`MAX_RECORDINGS`** | `0` | Maximum number of recent recordings to retain on disk (`0` disables cap). |
-
-## Development &amp; Packaging
-
-All unpacked workflow source files live in `workflow/` and the workflow version is centralized in `VERSION`:
-
-- `workflow/`: Unpacked Alfred workflow payload (`info.plist`, `icon.png`, `scripts/`, `history.alfredui/`, `hud.alfredui/`).
-- `VERSION`: Single source of truth for the workflow version.
-- `scripts/package.sh`: Syncs `VERSION` and `README.md` into `workflow/info.plist`, validates configuration, and outputs `Whisper Alfred.alfredworkflow` at the repository root.
-- `test/test_workflow.sh`: Automated verification suite.
-
-Package the workflow using the current `VERSION` or bump to a new version:
-
-```bash
-./scripts/package.sh        # Builds ./Whisper Alfred.alfredworkflow from workflow/
-./scripts/package.sh 0.8.4  # Updates VERSION, syncs workflow/info.plist, and rebuilds package
-```
-
-Double-click `Whisper Alfred.alfredworkflow` in Finder to import or update your local Alfred installation.
-
-Run the verification suite:
-
-```bash
-./test/test_workflow.sh
-```
-
-## Technical &amp; Audio Recording Details
-
-By default, the workflow uses `ffmpeg` to capture 16kHz mono audio directly into compressed MPEG-4 (`.m4a` AAC) format to maximize upload speed and reduce disk usage by 80%+ while remaining fully compatible with Groq, Mistral, and Faster-Whisper:
-
-```bash
-nohup ffmpeg -hide_banner -loglevel error -y "${DURATION_ARGS[@]}" -thread_queue_size 1024 -f avfoundation -i ":default" -ar 16000 -ac 1 -c:a aac -b:a 64k "$AUDIO_PATH" &gt;"$LOG_FILE" 2&gt;&amp;1 &lt;/dev/null &amp;
-```
-
-If a local server is offline when triggering dictation, Whisper Alfred pastes an error notification into your active application:
-
-```text
-[Whisper Alfred Error: Could not connect to local server on http://127.0.0.1:8080/v1/audio/transcriptions. Please verify your local server is running.]
-```
+Customize providers, API keys, endpoints, keyword prefix, audio format, and retention limits in the Workflow’s Configuration.
 </string>
 	<key>uidata</key>
 	<dict>
@@ -1022,6 +935,27 @@ If a local server is offline when triggering dictation, Whisper Alfred pastes an
 	</dict>
 	<key>userconfigurationconfig</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>whisper</string>
+				<key>placeholder</key>
+				<string>whisper</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Keyword prefix to start dictation and access history, cancel, open, or prune commands.</string>
+			<key>label</key>
+			<string>Dictation Keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>WHISPER_KEYWORD</string>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>

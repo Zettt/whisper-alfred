@@ -21,7 +21,7 @@ if [[ -d "$RECORDINGS_DIR" ]]; then
 	TOTAL_SIZE="${TOTAL_SIZE:-0B}"
 fi
 
-RETENTION="${RETENTION_DAYS:-7}"
+RETENTION="${RETENTION_DAYS:-30}"
 QUERY=$(echo "${1:-}" | tr '[:upper:]' '[:lower:]' | tr -d '\r\n' | xargs)
 
 python3 - "$QUERY" "$AUDIO_COUNT" "$JSON_COUNT" "$TOTAL_SIZE" "$RETENTION" <<'PY'

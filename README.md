@@ -14,9 +14,11 @@ Double-click `Whisper Alfred.alfredworkflow` in Finder (built at the repository 
 
 ## Usage
 
-Dictate text into any active application via the Hotkey (default: <kbd>⇧</kbd><kbd>⌃</kbd><kbd>=</kbd>) or via the `whisper` keyword.
+Dictate text into any active application via the `whisper` keyword or by configuring the Hotkey.
 
 Press once to start recording, and press again (or click **Stop** / press <kbd>↩︎</kbd> on the status HUD) to stop, transcribe, clean up, and paste the output into your frontmost application.
+
+![Dictating text with Whisper Alfred](images/usage.png)
 
 Available keywords:
 
@@ -59,6 +61,7 @@ Set provider keys, endpoints, models, and retention settings in the Workflow’s
 
 | Environment Variable | Default Value | Description |
 | --- | --- | --- |
+| **`WHISPER_KEYWORD`** | `whisper` | Keyword prefix for all dictation and management commands. |
 | **`TRANSCRIPTION_PROVIDER`** | `mistral` | Transcription backend (`mistral`, `groq`, or `local`). |
 | **`TRANSCRIPTION_MODEL`** | *(provider default)* | Override default transcription model string. |
 | **`PARAKEET_ENDPOINT`** | `http://127.0.0.1:8080/v1/audio/transcriptions` | Endpoint URL for local server transcription. |

@@ -2,7 +2,7 @@
 
 # Audio & Metadata Sidecar Retention Pruner for Alfred Workflow
 # Supports arguments ($1):
-#   (empty) / auto / text -> Retention check (deletes files older than RETENTION_DAYS, default: 7)
+#   (empty) / auto / text -> Retention check (deletes files older than RETENTION_DAYS, default: 30)
 #   force / all / purge / 0 -> Purges ALL recordings & sidecars immediately
 #   recordings / m4a / audio -> Deletes only audio files, keeping JSON sidecars
 #   archive                 -> Moves recordings & sidecars to $DATA_DIR/archive/
@@ -88,7 +88,7 @@ case "$ARG" in
 			if [[ "$ARG" =~ ^[0-9]+$ ]]; then
 				DAYS="$ARG"
 			else
-				DAYS="${RETENTION_DAYS:-7}"
+				DAYS="${RETENTION_DAYS:-30}"
 			fi
 			prune_by_age "$DAYS"
 			if [[ "${MAX_RECORDINGS:-0}" =~ ^[1-9][0-9]*$ ]]; then

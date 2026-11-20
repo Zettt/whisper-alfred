@@ -550,11 +550,23 @@ with open("./workflow/info.plist", "rb") as f:
 objs = {o["uid"]: o for o in p.get("objects", [])}
 conns = p.get("connections", {})
 
-sf = [o for o in objs.values() if o.get("type") == "alfred.workflow.input.scriptfilter" and o.get("config", {}).get("keyword") == "whisper prune"]
-assert len(sf) == 1 and "./scripts/prune_filter.sh" in sf[0]["config"].get("script", ""), "Missing whisper prune script filter"
+sf = [o for o in objs.values() if o.get("type") == "alfred.workflow.input.scriptfilter" and o.get("config", {}).get("keyword") == "{var:WHISPER_KEYWORD} prune"]
+assert len(sf) == 1 and "./scripts/prune_filter.sh" in sf[0]["config"].get("script", ""), "Missing configurable whisper prune script filter"
 
-hk = [o for o in objs.values() if o.get("type") == "alfred.workflow.input.keyword" and o.get("config", {}).get("keyword") == "whisper history"]
-assert len(hk) == 1, "Missing whisper history keyword"
+hk = [o for o in objs.values() if o.get("type") == "alfred.workflow.input.keyword" and o.get("config", {}).get("keyword") == "{var:WHISPER_KEYWORD} history"]
+assert len(hk) == 1, "Missing configurable whisper history keyword"
+
+open_kw = [o for o in objs.values() if o.get("type") == "alfred.workflow.input.keyword" and o.get("config", {}).get("keyword") == "{var:WHISPER_KEYWORD} open"]
+assert len(open_kw) == 1 and open_kw[0]["config"].get("argumenttype") == 2 and open_kw[0]["config"].get("withspace") is False, "Invalid whisper open keyword config"
+
+cfg = {c["variable"]: c for c in p.get("userconfigurationconfig", [])}
+assert cfg.get("WHISPER_KEYWORD", {}).get("config", {}).get("default") == "whisper", "Missing WHISPER_KEYWORD default"
+
+hotkeys = [o for o in objs.values() if o.get("type") == "alfred.workflow.trigger.hotkey"]
+assert len(hotkeys) == 1 and hotkeys[0]["config"].get("hotkey") == 0 and hotkeys[0]["config"].get("hotmod") == 0, "Hotkey trigger must be unbound for export"
+
+readme_text = p.get("readme", "")
+assert readme_text.startswith("## Setup") and "## Usage" in readme_text and "brew install" not in readme_text, "Workflow readme must follow Gallery Style Guide"
 hist_prep = conns.get(hk[0]["uid"], [{}])[0].get("destinationuid")
 assert "./scripts/history_prepare.sh" in objs[hist_prep]["config"].get("script", ""), "whisper history missing history_prepare.sh"
 hist_ui = conns.get(hist_prep, [{}])[0].get("destinationuid")
